@@ -26,6 +26,21 @@ function initApp() {
 
 // Set up all event listeners
 function setupEventListeners() {
+	// Ensure all main step headers have click handlers
+	document.querySelectorAll('.main-step-header').forEach((header, index) => {
+		const stepNumber = index + 1;
+		header.removeEventListener('click', () => toggleMainStep(stepNumber));
+		header.addEventListener('click', () => toggleMainStep(stepNumber));
+	});
+
+	// Ensure all substep tabs have click handlers
+	document.querySelectorAll('.substep-tab').forEach(tab => {
+		const stepNumber = parseInt(tab.getAttribute('data-step'));
+		const substepLetter = tab.getAttribute('data-substep');
+		tab.removeEventListener('click', () => switchSubstep(stepNumber, substepLetter));
+		tab.addEventListener('click', () => switchSubstep(stepNumber, substepLetter));
+	});
+	
     // Form elements for Step 1A
     document.getElementById('provider').addEventListener('change', handleProviderChange);
     document.getElementById('course').addEventListener('change', handleFormInputChange);
@@ -235,4 +250,51 @@ function updateButtonStates() {
 }
 
 // Initialize the application when the DOM is ready
-document.addEventListener('DOMContentLoaded', initApp);
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded - initializing app');
+    window.initApp();
+});
+
+// Initialize the application
+window.initApp = function() {
+    console.log('Initializing app...');
+    
+    // Ensure appState is available
+    if (!window.appState) {
+        console.error('appState is not defined');
+        window.appState = {
+            currentMainStep: 1,
+            currentSubStep: 'A',
+            mainStepExpanded: [true, false, false, false],
+            lessonInfo: {}
+        };
+    }
+    
+    setupEventListeners();
+    updateStepIndicators();
+    setupResponseTabs();
+    updateButtonStates();
+    
+    // Initialize scroll indicators for substep navigation
+    checkSubstepNavScroll();
+    
+    console.log('App initialization complete');
+	
+window.toggleMainStep = function(stepNumber) {
+    try {
+        console.log('Toggling main step', stepNumber);
+        const mainStep = document.getElementById(`mainStep${stepNumber}`);
+        const mainStepContent = document.getElementById(`mainStepContent${stepNumber}`);
+        
+        if (!mainStep || !mainStepContent) {
+            console.error(`Could not find main step ${stepNumber} elements`);
+            return;
+        }
+        
+        // Rest of function remains the same
+    } catch (error) {
+        console.error('Error in toggleMainStep:', error);
+    }
+};
+
+};document.addEventListener('DOMContentLoaded', initApp);

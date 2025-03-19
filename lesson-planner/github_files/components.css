@@ -1,0 +1,484 @@
+/* ==================== Card Styles ==================== */
+.card {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--dark-gray);
+}
+
+.card-header {
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--light-gray);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.card-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+    background-color: var(--medium-gray);
+}
+
+/* ==================== Prompt and Response Areas ==================== */
+.prompt-response-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 992px) {
+    .prompt-response-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.prompt-area, .response-area {
+    display: flex;
+    flex-direction: column;
+}
+
+.area-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.area-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--dark-gray);
+    margin: 0;
+}
+
+.textarea-container {
+    position: relative;
+    flex-grow: 1;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color var(--transition-speed);
+}
+
+.copy-btn:hover {
+    background-color: var(--info-color);
+}
+
+.prompt-textarea, .response-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 1rem;
+    border: 1px solid var(--dark-gray);
+    border-radius: 0.25rem;
+    font-size: 0.9rem;
+    resize: vertical;
+    font-family: monospace;
+    line-height: 1.5;
+}
+
+.prompt-textarea {
+    background-color: var(--light-gray);
+}
+
+.response-textarea {
+    background-color: white;
+}
+
+.response-instructions {
+    font-size: 0.875rem;
+    color: var(--medium-gray);
+    margin-top: 0.5rem;
+}
+
+/* ==================== Response Preview ==================== */
+.response-preview {
+    margin-top: 1rem;
+    display: none;
+}
+
+.response-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--light-gray);
+    margin-bottom: 0.5rem;
+}
+
+.response-tab {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    font-size: 0.875rem;
+    transition: all var(--transition-speed);
+}
+
+.response-tab.active {
+    border-bottom-color: var(--primary-color);
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.response-display {
+    border: 1px solid var(--light-gray);
+    border-radius: 0.25rem;
+    padding: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: white;
+}
+
+.response-content {
+    display: none;
+}
+
+.response-content.active {
+    display: block;
+}
+
+/* ==================== Learning Objective Container ==================== */
+.lo-container {
+    border: 1px solid var(--light-gray);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.lo-header {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lo-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 1rem;
+    background-color: var(--info-color);
+    color: white;
+}
+
+.badge-practical {
+    background-color: var(--accent-color);
+}
+
+/* ==================== Framework Card Styles ==================== */
+.framework-card {
+    border: 1px solid var(--light-gray);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: all var(--transition-speed);
+    cursor: pointer;
+}
+
+.framework-card:hover {
+    border-color: var(--step2-color);
+    background-color: var(--extra-light-gray);
+}
+
+.framework-card.selected {
+    border-color: var(--step2-color);
+    background-color: rgba(112, 173, 71, 0.1);
+}
+
+.framework-card-header {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--dark-gray);
+}
+
+.framework-card-description {
+    font-size: 0.9rem;
+    color: var(--medium-gray);
+}
+
+/* ==================== Technique Selection Styles ==================== */
+.technique-selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.technique-badge {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--extra-light-gray);
+    border: 1px solid var(--medium-gray);
+    border-radius: 1rem;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--transition-speed);
+}
+
+.technique-badge:hover {
+    background-color: var(--light-gray);
+}
+
+.technique-badge.selected {
+    background-color: var(--step2-color);
+    color: white;
+    border-color: var(--step2-color);
+}
+
+/* ==================== Buttons ==================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color var(--transition-speed), transform 0.1s;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--info-color);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background-color: #5c9038;
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.btn-accent:hover:not(:disabled) {
+    background-color: #d96b1e;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--dark-gray);
+    color: var(--dark-gray);
+}
+
+.btn-outline:hover:not(:disabled) {
+    background-color: var(--light-gray);
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+/* ==================== Response Edit Area ==================== */
+.response-edit {
+    margin-top: 1rem;
+    display: none;
+}
+
+.edit-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 1rem;
+    border: 1px solid var(--primary-color);
+    border-radius: 0.25rem;
+    resize: vertical;
+    font-family: monospace;
+    line-height: 1.5;
+}
+
+/* New style for editing buttons */
+.edit-button {
+    background: none;
+    border: none;
+    color: var(--info-color);
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s;
+}
+
+.edit-button:hover {
+    background-color: var(--extra-light-gray);
+}
+
+/* ==================== Practical Section Styles ==================== */
+.practical-section {
+    border: 1px solid var(--light-gray);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.practical-section-header {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--dark-gray);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.practical-section-content {
+    margin-bottom: 0.5rem;
+}
+
+/* ==================== Frayer Model Styles ==================== */
+.frayer-model-container {
+    border: 1px solid var(--light-gray);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.frayer-model-header {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--dark-gray);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.frayer-model-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.frayer-model-cell {
+    border: 1px solid var(--light-gray);
+    border-radius: 0.25rem;
+    padding: 0.75rem;
+}
+
+.frayer-model-cell-title {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--dark-gray);
+}
+
+/* ==================== Lesson Structure Styles ==================== */
+.lesson-segment {
+    border: 1px solid var(--light-gray);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.segment-header {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--dark-gray);
+}
+
+.retrieval-questions {
+    margin-bottom: 1.5rem;
+}
+
+.retrieval-question {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.retrieval-question input {
+    flex-grow: 1;
+    margin-right: 0.5rem;
+}
+
+.variable-row, .equipment-row, .step-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.variable-row input, .equipment-row input, .step-row input {
+    flex-grow: 1;
+    margin-right: 0.5rem;
+}
+
+.variable-type {
+    width: 120px;
+    margin-right: 0.5rem;
+}
+
+.frayer-model-type-selection {
+    margin-bottom: 1.5rem;
+}
+
+.frayer-example-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.frayer-example-item input {
+    flex-grow: 1;
+    margin-right: 0.5rem;
+}
+
+.list-item-editor {
+    margin-bottom: 0.5rem;
+}
+
+.list-item-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.list-item-input {
+    flex-grow: 1;
+    margin-right: 0.5rem;
+}
+
+.list-actions {
+    display: flex;
+    gap: 0.25rem;
+}

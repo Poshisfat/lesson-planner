@@ -1,5 +1,5 @@
 // Toggle main step expansion
-function toggleMainStep(stepNumber) {
+window.toggleMainStep = function(stepNumber) {
     console.log('Toggling main step', stepNumber);
     const stepIndex = stepNumber - 1;
     const mainStep = document.getElementById(`mainStep${stepNumber}`);
@@ -22,7 +22,7 @@ function toggleMainStep(stepNumber) {
 }
 
 // Scroll the substep navigation
-function scrollSubstepNav(direction) {
+window.scrollSubstepNav = function(direction) {
     const currentStep = appState.currentMainStep;
     const nav = document.querySelector(`.main-step-${currentStep} .substeps-nav`);
     
@@ -58,7 +58,7 @@ function checkSubstepNavScroll() {
 }
 
 // Switch to a specific substep
-function switchSubstep(mainStep, subStep) {
+window.switchSubstep = function(mainStep, subStep) {
     console.log('Switching to substep', mainStep, subStep);
     
     // Update state

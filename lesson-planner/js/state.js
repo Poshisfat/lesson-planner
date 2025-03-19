@@ -1,5 +1,5 @@
 // APPLICATION STATE
-const appState = {
+window.appState = {
     // Navigation state
     currentMainStep: 1,
     currentSubStep: 'A',

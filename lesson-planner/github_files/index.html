@@ -1,0 +1,2472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCSE Science Lesson Planner</title>
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/modals.css">
+</head>
+<body>
+    <div class="container" id="app">
+        <!-- Application Header -->
+        <header class="app-header">
+            <h1 class="app-title">GCSE Science Lesson Planner</h1>
+            <p class="app-description">Create comprehensive lesson plans with Claude AI assistance</p>
+        </header>
+
+        <!-- Main Steps Container -->
+        <div class="main-steps">
+            <!-- Step 1: Lesson Foundations -->
+            <div class="main-step main-step-1 expanded" id="mainStep1">
+                <div class="main-step-header" onclick="toggleMainStep(1)">
+                    <div class="main-step-number">1</div>
+                    <div class="main-step-title">Lesson Foundations</div>
+                    <div class="main-step-status status-in-progress">In Progress</div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="main-step-content" id="mainStepContent1" style="height: auto;">
+                    <div class="main-step-inner">
+                        <!-- Substeps Navigation -->
+                        <div class="substeps-nav">
+                            <div class="nav-scroll-indicator nav-scroll-left" onclick="scrollSubstepNav('left')">◀</div>
+                            <div class="substep-tab active" data-step="1" data-substep="A" onclick="switchSubstep(1, 'A')">1A: Basic Info & LOs</div>
+                            <div class="substep-tab" data-step="1" data-substep="B" onclick="switchSubstep(1, 'B')">1B: LO Types</div>
+                            <div class="substep-tab" data-step="1" data-substep="C" onclick="switchSubstep(1, 'C')">1C: Misconceptions</div>
+                            <div class="substep-tab" data-step="1" data-substep="D" onclick="switchSubstep(1, 'D')">1D: Prior Knowledge</div>
+                            <div class="substep-tab" data-step="1" data-substep="E" onclick="switchSubstep(1, 'E')">1E: Review & Edit</div>
+                            <div class="nav-scroll-indicator nav-scroll-right" onclick="scrollSubstepNav('right')">▶</div>
+                        </div>
+
+                        <!-- Substep 1A: Basic Info & Learning Objectives -->
+                        <div class="substep-content active" data-step="1" data-substep="A">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Lesson Information</h3>
+                                </div>
+                                
+                                <div class="form-grid grid-3">
+                                    <div class="form-group">
+                                        <label class="form-label" for="provider">Exam Board</label>
+                                        <select id="provider" class="form-control">
+                                            <option value="">Select Exam Board</option>
+                                            <option value="AQA">AQA</option>
+                                            <option value="Edexcel">Edexcel</option>
+                                            <option value="OCR">OCR</option>
+                                            <option value="WJEC">WJEC</option>
+                                            <option value="CCEA">CCEA</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="course">Course</label>
+                                        <select id="course" class="form-control" disabled>
+                                            <option value="">Select Course</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="level">Level</label>
+                                        <select id="level" class="form-control">
+                                            <option value="">Select Level</option>
+                                            <option value="Foundation">Foundation</option>
+                                            <option value="Higher">Higher</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="ability">Student Ability</label>
+                                        <select id="ability" class="form-control">
+                                            <option value="">Select Ability Level</option>
+                                            <option value="Lower">Lower Ability</option>
+                                            <option value="Standard">Standard Ability</option>
+                                            <option value="Higher">Higher Ability</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="subject">Subject</label>
+                                        <select id="subject" class="form-control">
+                                            <option value="">Select Subject</option>
+                                            <option value="Biology">Biology</option>
+                                            <option value="Chemistry">Chemistry</option>
+                                            <option value="Physics">Physics</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="topic">Topic</label>
+                                        <input type="text" id="topic" class="form-control" placeholder="e.g. Atomic Structure">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="lessonNumber">Lesson Number</label>
+                                        <input type="number" id="lessonNumber" class="form-control" placeholder="e.g. 3">
+                                    </div>
+                                    
+                                    <div class="form-group span-2">
+                                        <label class="form-label" for="lessonTitle">Lesson Title</label>
+                                        <input type="text" id="lessonTitle" class="form-control" placeholder="e.g. Understanding Isotopes">
+                                    </div>
+                                    
+                                    <div class="form-group span-3">
+                                        <label class="form-label" for="description">Additional Information (Optional)</label>
+                                        <textarea id="description" class="form-control" placeholder="Add any specific focus areas or requirements for this lesson" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="alert alert-info">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                    <div>
+                                        Complete all fields above to generate your lesson plan. This information will be included in your prompt for Claude.
+                                    </div>
+                                </div>
+                                
+                                <div class="prompt-response-container">
+                                    <div class="prompt-area">
+                                        <div class="area-header">
+                                            <h4 class="area-title">Generate Lesson Overview</h4>
+                                            <button id="generateOverviewPromptBtn" class="btn btn-secondary btn-sm">Generate Prompt</button>
+                                        </div>
+                                        <div class="textarea-container">
+                                            <textarea id="overviewPromptTextarea" class="prompt-textarea" readonly placeholder="Fill out the lesson information form and click 'Generate Prompt'"></textarea>
+                                            <button id="copyOverviewPromptBtn" class="copy-btn">Copy</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="response-area">
+                                        <div class="area-header">
+                                            <h4 class="area-title">Claude's Response</h4>
+                                            <button id="previewOverviewResponseBtn" class="btn btn-outline btn-sm">Preview</button>
+                                        </div>
+                                        <div class="textarea-container">
+                                            <textarea id="overviewResponseTextarea" class="response-textarea" placeholder="Paste Claude's response here..."></textarea>
+                                        </div>
+                                        <p class="response-instructions">Paste Claude's full response including all XML tags</p>
+                                        
+                                        <div id="overviewPreview" class="response-preview">
+                                            <div class="response-tabs">
+                                                <div class="response-tab active" data-tab="overviewFormatted">Formatted</div>
+                                                <div class="response-tab" data-tab="overviewTagged">Tagged</div>
+                                            </div>
+                                            <div class="response-display">
+                                                <div class="response-content active" id="overviewFormattedResponse"></div>
+                                                <div class="response-content" id="overviewTaggedResponse"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- New section for Learning Objectives with Practical Detection -->
+                                <div id="learningObjectivesSection" style="margin-top: 2rem; display: none;">
+                                    <h4>Learning Objectives</h4>
+                                    <p>Review the learning objectives and indicate if any involve a practical component:</p>
+                                    
+                                    <div id="loContainers">
+                                        <!-- LO1 Container -->
+                                        <div class="lo-container" id="lo1Container">
+                                            <div class="lo-header">
+                                                <span>Learning Objective 1</span>
+                                                <div>
+                                                    <span id="lo1Badge" class="lo-badge"></span>
+                                                </div>
+                                            </div>
+                                            <p id="lo1Title"></p>
+                                            <p id="lo1Description"></p>
+                                            <div class="checkbox-container">
+                                                <input type="checkbox" id="lo1HasPractical">
+                                                <label for="lo1HasPractical">This learning objective involves a practical component</label>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- LO2 Container -->
+                                        <div class="lo-container" id="lo2Container">
+                                            <div class="lo-header">
+                                                <span>Learning Objective 2</span>
+                                                <div>
+                                                    <span id="lo2Badge" class="lo-badge"></span>
+                                                </div>
+                                            </div>
+                                            <p id="lo2Title"></p>
+                                            <p id="lo2Description"></p>
+                                            <div class="checkbox-container">
+                                                <input type="checkbox" id="lo2HasPractical">
+                                                <label for="lo2HasPractical">This learning objective involves a practical component</label>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- LO3 Container -->
+                                        <div class="lo-container" id="lo3Container" style="display: none;">
+                                            <div class="lo-header">
+                                                <span>Learning Objective 3</span>
+                                                <div>
+                                                    <span id="lo3Badge" class="lo-badge"></span>
+                                                </div>
+                                            </div>
+                                            <p id="lo3Title"></p>
+                                            <p id="lo3Description"></p>
+                                            <div class="checkbox-container">
+                                                <input type="checkbox" id="lo3HasPractical">
+                                                <label for="lo3HasPractical">This learning objective involves a practical component</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="learn-more-container" id="practicalInfoContainer">
+                                        <div class="learn-more-header" onclick="toggleLearnMore('practicalInfoContainer')">
+                                            <span>Learn more about practical components</span>
+                                            <span class="learn-more-icon">▼</span>
+                                        </div>
+                                        <div class="learn-more-content">
+                                            <p>Practical components in learning objectives typically involve hands-on activities where students:</p>
+                                            <ul>
+                                                <li>Set up and perform experiments</li>
+                                                <li>Use laboratory equipment</li>
+                                                <li>Collect data or make observations</li>
+                                                <li>Analyze practical results</li>
+                                                <li>Apply practical skills like measuring, calibrating, or observing</li>
+                                            </ul>
+                                            <p>Marking an LO as having a practical component will help generate appropriate activities, assessments, and safety considerations for that objective.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="nav-buttons">
+                                    <div></div>
+                                    <div class="nav-buttons-right">
+                                        <button id="continueToLOTypesBtn" class="btn btn-primary" disabled>Continue to LO Types</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Substep 1B: Learning Objective Types -->
+                        <div class="substep-content" data-step="1" data-substep="B">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Learning Objective Types</h3>
+                                </div>
+                                
+                                <div class="alert alert-info">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                    <div>
+                                        For each learning objective, we'll identify which type of assessment objective it aligns with (AO1, AO2, or AO3) and the specific sub-category.
+                                    </div>
+                                </div>
+
+                                <!-- Learning Objectives Summary -->
+                                <div id="loBSummary" class="response-display" style="max-height: none; margin-bottom: 1.5rem;">
+                                    <h4>Learning Objectives</h4>
+                                    <div id="loBSummaryContent">
+                                        <p>Please complete Step 1A first to see your learning objectives here.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="prompt-response-container">
+                                    <div class="prompt-area">
+                                        <div class="area-header">
+                                            <h4 class="area-title">Generate LO Types</h4>
+                                            <button id="generateLOTypesPromptBtn" class="btn btn-secondary btn-sm">Generate Prompt</button>
+                                        </div>
+                                        <div class="textarea-container">
+                                            <textarea id="loTypesPromptTextarea" class="prompt-textarea" readonly placeholder="First complete Step 1A to generate this prompt..."></textarea>
+                                            <button id="copyLOTypesPromptBtn" class="copy-btn">Copy</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="response-area">
+                                        <div class="area-header">
+                                            <h4 class="area-title">Claude's Response</h4>
+                                            <button id="previewLOTypesResponseBtn" class="btn btn-outline btn-sm">Preview</button>
+                                        </div>
+                                        <div class="textarea-container">
+                                            <textarea id="loTypesResponseTextarea" class="response-textarea" placeholder="Paste Claude's response here..."></textarea>
+                                        </div>
+                                        <p class="response-instructions">Paste Claude's full response including all XML tags</p>
+                                        
+                                        <div id="loTypesPreview" class="response-preview">
+                                            <div class="response-tabs">
+                                                <div class="response-tab active" data-tab="loTypesFormatted">Formatted</div>
+                                                <div class="response-tab" data-tab="loTypesTagged">Tagged</div>
+                                            </div>
+                                            <div class="response-display">
+                                                <div class="response-content active" id="loTypesFormattedResponse"></div>
+                                                <div class="response-content" id="loTypesTaggedResponse"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Learning Objective Types with Edit Feature -->
+                                <div id="loTypesEditContainer" style="margin-top: 2rem; display: none;">
+                                    <h4>Learning Objective Types</h4>
+                                    <p>Review and edit the learning objective types:</p>
+                                    
+                                    <!-- LO1 Types -->
+                                    <div class="lo-container">
+                                        <div class="lo-header">
+                                            <span>Learning Objective 1 Types</span>
+                                            <button class="edit-button" id="editLO1TypeBtn">Edit</button>
+                                        </div>
+                                        <div id="lo1TypeContent">
+                                            <p><strong>Assessment Objective:</strong> <span id="lo1AOCategory"></span></p>
+                                            <p><strong>Specific Type:</strong> <span id="lo1SpecificType"></span></p>
+                                            <p><strong>Justification:</strong> <span id="lo1TypeJustification"></span></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- LO2 Types -->
+                                    <div class="lo-container">
+                                        <div class="lo-header">
+                                            <span>Learning Objective 2 Types</span>
+                                            <button class="edit-button" id="editLO2TypeBtn">Edit</button>
+                                        </div>
+                                        <div id="lo2TypeContent">
+                                            <p><strong>Assessment Objective:</strong> <span id="lo2AOCategory"></span></p>
+                                            <p><strong>Specific Type:</strong> <span id="lo2SpecificType"></span></p>
+                                            <p><strong>Justification:</strong> <span id="lo2TypeJustification"></span></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- LO3 Types -->
+                                    <div class="lo-container" id="lo3TypeContainer" style="display: none;">
+                                        <div class="lo-header">
+                                            <span>Learning Objective 3 Types</span>
+                                            <button class="edit-button" id="editLO3TypeBtn">Edit</button>
+                                        </div>
+                                        <div id="lo3TypeContent">
+                                            <p><strong>Assessment Objective:</strong> <span id="lo3AOCategory"></span></p>
+                                            <p><strong>Specific Type:</strong> <span id="lo3SpecificType"></span></p>
+                                            <p><strong>Justification:</strong> <span id="lo3TypeJustification"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="nav-buttons">
+                                    <button class="btn btn-outline" onclick="switchSubstep(1, 'A')">Back</button>
+                                    <div class="nav-buttons-right">
+                                        <button id="continueToMisconceptionsBtn" class="btn btn-primary" disabled>Continue to Misconceptions</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Substep 1C: Misconceptions -->
+                        <div class="substep-content" data-step="1" data-substep="C">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Potential Misconceptions</h3>
+                                </div>
+                                
+                                <div class="alert alert-info">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                    <div>
+                                        Identify common misconceptions that students might have for each learning objective. This will help you address them during the lesson.
+                                    </div>
+                                </div>
+
+                                <!-- Learning Objectives Summary -->
+                                <div id="loCSummary" class="response-display" style="max-height: none; margin-bottom: 1.5rem;">
+                                    <h4>Learning Objectives & Types</h4>
+                                    <div id="loCSummaryContent">
+                                        <p>Please complete Steps 1A and 1B first to see your learning objectives here.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="prompt-response-container">
+                                    <div class="prompt-area">
+                                        <div class="area-header">
+                                            <h4 class="area-title">Generate Misconceptions</h4>
+                                            <button id="generateMisconceptionsPromptBtn" class="btn btn-secondary btn-sm">Generate Prompt</button>
+                                        </div>
+                                        <div class="textarea-container">
+                                            <textarea id="misconceptionsPromptTextarea" class="prompt-textarea" readonly placeholder="First complete Steps 1A and 1B to generate this prompt..."></textarea>
+                                            <button id="copyMisconceptionsPromptBtn" class="copy-btn">Copy</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="response-area">
+                                        <div class="area-header">
+                                            <h4 class="area-title">Claude's Response</h4>
+                                            <button id="previewMisconceptionsResponseBtn" class="btn btn-outline btn-sm">Preview</button>
+                                        </div>
+                                        <div class="textarea-container">
+                                            <textarea id="misconceptionsResponseTextarea" class="response-textarea" placeholder="Paste Claude's response here..."></textarea>
+                                        </div>
+                                        <p class="response-instructions">Paste Claude's full response including all XML tags</p>
+                                        
+                                        <div id="misconceptionsPreview" class="response-preview">
+                                            <div class="response-tabs">
+                                                <div class="response-tab active" data-tab="misconceptionsFormatted">Formatted</div>
+                                                <div class="response-tab" data-tab="misconceptionsTagged">Tagged</div>
+                                            </div>
+                                            <div class="response-display">
+                                                <div class="response-content active" id="misconceptionsFormattedResponse"></div>
+                                                <div class="response-content" id="misconceptionsTaggedResponse"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Misconceptions with Edit Feature -->
+                                <div id="misconceptionsEditContainer" style="margin-top: 2rem; display: none;">
+                                    <h4>Potential Misconceptions</h4>
+                                    <p>Review and edit the misconceptions for each learning objective:</p>
+                                    
+                                    <!-- LO1 Misconceptions -->
+                                    <div class="lo-container">
+                                        <div class="lo-header">
+                                            <span>Learning Objective 1 Misconceptions</span>
+                                            <button class="edit-button" id="editLO1MisconceptionsBtn">Edit</button>
+                                        </div>
+                                        <div id="lo1MisconceptionsContent">
+                                            <ul id="lo1MisconceptionsList">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- LO2 Misconceptions -->
+                                    <div class="lo-container">
+                                        <div class="lo-header">
+                                            <span>Learning Objective 2 Misconceptions</span>
+                                            <button class="edit-button" id="editLO2MisconceptionsBtn">Edit</button>
+                                        </div>
+                                        <div id="lo2MisconceptionsContent">
+                                            <ul id="lo2MisconceptionsList">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- LO3 Misconceptions -->
+                                    <div class="lo-container" id="lo3MisconceptionsContainer" style="display: none;">
+                                        <div class="lo-header">
+                                            <span>Learning Objective 3 Misconceptions</span>
+                                            <button class="edit-button" id="editLO3MisconceptionsBtn">Edit</button>
+                                        </div>
+                                        <div id="lo3MisconceptionsContent">
+                                            <ul id="lo3MisconceptionsList">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="nav-buttons">
+                                    <button class="btn btn-outline" onclick="switchSubstep(1, 'B')">Back</button>
+                                    <div class="nav-buttons-right">
+                                        <button id="continueToPriorKnowledgeBtn" class="btn btn-primary" disabled>Continue to Prior Knowledge</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Substep 1D: Prior Knowledge -->
+                        <div class="substep-content" data-step="1" data-substep="D">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Prior Knowledge Requirements</h3>
+                                </div>
+                                
+                                <div class="alert alert-info">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                    <div>
+                                        Identify the essential prior knowledge that students need to have before this lesson. This will help you plan appropriate retrieval practice.
+                                    </div>
+                                </div>
+
+                                <!-- Learning Objectives and Misconceptions Summary -->
+                                <div id="loDSummary" class="response-display" style="max-height: none; margin-bottom: 1.5rem;">
+                                    <div id="loDSummaryContent">
+                                        <p>Please complete Steps 1A, 1B, and 1C first to see your learning objectives and misconceptions here.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="prompt-response-container">
+                                    <div class="prompt-area">
+                                        <div class="area-header">
+                                            <h4 class="area-title">Generate Prior Knowledge</h4>
+                                            <button id="generatePriorKnowledgePromptBtn" class="btn btn-secondary btn-sm">Generate Prompt</button>
+                                        </div>
+                                        <div class="textarea-container">
+                                            <textarea id="priorKnowledgePromptTextarea" class="prompt-textarea" readonly placeholder="First complete Steps 1A, 1B, and 1C to generate this prompt..."></textarea>
+                                            <button id="copyPriorKnowledgePromptBtn" class="copy-btn">Copy</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="response-area">
+                                        <div class="area-header">
+                                            <h4 class="area-title">Claude's Response</h4>
+                                            <button id="previewPriorKnowledgeResponseBtn" class="btn btn-outline btn-sm">Preview</button>
+                                        </div>
+                                        <div class="textarea-container">
+                                            <textarea id="priorKnowledgeResponseTextarea" class="response-textarea" placeholder="Paste Claude's response here..."></textarea>
+                                        </div>
+                                        <p class="response-instructions">Paste Claude's full response including all XML tags</p>
+                                        
+                                        <div id="priorKnowledgePreview" class="response-preview">
+                                            <div class="response-tabs">
+                                                <div class="response-tab active" data-tab="priorKnowledgeFormatted">Formatted</div>
+                                                <div class="response-tab" data-tab="priorKnowledgeTagged">Tagged</div>
+                                            </div>
+                                            <div class="response-display">
+                                                <div class="response-content active" id="priorKnowledgeFormattedResponse"></div>
+                                                <div class="response-content" id="priorKnowledgeTaggedResponse"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Prior Knowledge with Edit Feature -->
+                                <div id="priorKnowledgeEditContainer" style="margin-top: 2rem; display: none;">
+                                    <h4>Prior Knowledge Requirements</h4>
+                                    <p>Review and edit the prior knowledge for each learning objective:</p>
+                                    
+                                    <!-- LO1 Prior Knowledge -->
+                                    <div class="lo-container">
+                                        <div class="lo-header">
+                                            <span>Learning Objective 1 Prior Knowledge</span>
+                                            <button class="edit-button" id="editLO1PriorKnowledgeBtn">Edit</button>
+                                        </div>
+                                        <div id="lo1PriorKnowledgeContent">
+                                            <ul id="lo1PriorKnowledgeList">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- LO2 Prior Knowledge -->
+                                    <div class="lo-container">
+                                        <div class="lo-header">
+                                            <span>Learning Objective 2 Prior Knowledge</span>
+                                            <button class="edit-button" id="editLO2PriorKnowledgeBtn">Edit</button>
+                                        </div>
+                                        <div id="lo2PriorKnowledgeContent">
+                                            <ul id="lo2PriorKnowledgeList">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- LO3 Prior Knowledge -->
+                                    <div class="lo-container" id="lo3PriorKnowledgeContainer" style="display: none;">
+                                        <div class="lo-header">
+                                            <span>Learning Objective 3 Prior Knowledge</span>
+                                            <button class="edit-button" id="editLO3PriorKnowledgeBtn">Edit</button>
+                                        </div>
+                                        <div id="lo3PriorKnowledgeContent">
+                                            <ul id="lo3PriorKnowledgeList">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="nav-buttons">
+                                    <button class="btn btn-outline" onclick="switchSubstep(1, 'C')">Back</button>
+                                    <div class="nav-buttons-right">
+                                        <button id="continueToReviewBtn" class="btn btn-primary" disabled>Continue to Review</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Substep 1E: Review & Edit -->
+                        <div class="substep-content" data-step="1" data-substep="E">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Review Lesson Foundations</h3>
+                                </div>
+                                
+                                <div class="alert alert-info">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                    <div>
+                                        Review all the information generated so far. You can make any necessary edits before continuing to the next step.
+                                    </div>
+                                </div>
+                                
+                                <div id="foundationsReview">
+                                    <h4>Lesson Information</h4>
+                                    <div class="response-display" id="lessonInfoReview">
+                                        <p>Complete all previous steps to see a summary here.</p>
+                                    </div>
+                                    
+                                    <h4 style="margin-top: 1.5rem;">Learning Objectives</h4>
+                                    <div class="response-display" id="learningObjectivesReview">
+                                        <p>Complete all previous steps to see a summary here.</p>
+                                    </div>
+                                    
+                                    <h4 style="margin-top: 1.5rem;">Learning Objective Types</h4>
+                                    <div class="response-display" id="loTypesReview">
+                                        <p>Complete all previous steps to see a summary here.</p>
+                                    </div>
+                                    
+                                    <h4 style="margin-top: 1.5rem;">Potential Misconceptions</h4>
+                                    <div class="response-display" id="misconceptionsReview">
+                                        <p>Complete all previous steps to see a summary here.</p>
+                                    </div>
+                                    
+                                    <h4 style="margin-top: 1.5rem;">Prior Knowledge Requirements</h4>
+                                    <div class="response-display" id="priorKnowledgeReview">
+                                        <p>Complete all previous steps to see a summary here.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="nav-buttons">
+                                    <button class="btn btn-outline" onclick="switchSubstep(1, 'D')">Back</button>
+                                    <div class="nav-buttons-right">
+                                        <button id="finishStep1Btn" class="btn btn-secondary" disabled>Complete & Continue to Step 2</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Teaching Approach -->
+            <div class="main-step main-step-2" id="mainStep2">
+                <div class="main-step-header" onclick="toggleMainStep(2)">
+                    <div class="main-step-number">2</div>
+                    <div class="main-step-title">Teaching Approach</div>
+                    <div class="main-step-status status-not-started">Not Started</div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="main-step-content" id="mainStepContent2">
+                    <div class="main-step-inner">
+                        <p>Complete Step 1 first to unlock this step.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Slide Generation -->
+            <div class="main-step main-step-3" id="mainStep3">
+                <div class="main-step-header" onclick="toggleMainStep(3)">
+                    <div class="main-step-number">3</div>
+                    <div class="main-step-title">Slide Generation</div>
+                    <div class="main-step-status status-not-started">Not Started</div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="main-step-content" id="mainStepContent3">
+                    <div class="main-step-inner">
+                        <p>Complete Steps 1 and 2 first to unlock this step.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Worksheet Generation -->
+            <div class="main-step main-step-4" id="mainStep4">
+                <div class="main-step-header" onclick="toggleMainStep(4)">
+                    <div class="main-step-number">4</div>
+                    <div class="main-step-title">Worksheet Generation</div>
+                    <div class="main-step-status status-not-started">Not Started</div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="main-step-content" id="mainStepContent4">
+					<div class="main-step-inner">
+						<!-- Substeps Navigation -->
+						<div class="substeps-nav">
+							<div class="nav-scroll-indicator nav-scroll-left" onclick="scrollSubstepNav('left')">◀</div>
+							<div class="substep-tab active" data-step="4" data-substep="A" onclick="switchSubstep(4, 'A')">4A: Reference Materials</div>
+							<div class="substep-tab" data-step="4" data-substep="B" onclick="switchSubstep(4, 'B')">4B: Prior Knowledge Retrieval</div>
+							<div class="substep-tab" data-step="4" data-substep="C" onclick="switchSubstep(4, 'C')">4C: SCALE Questions</div>
+							<div class="substep-tab" data-step="4" data-substep="D" onclick="switchSubstep(4, 'D')">4D: Application Questions</div>
+							<div class="substep-tab" data-step="4" data-substep="E" onclick="switchSubstep(4, 'E')">4E: Exam Technique Questions</div>
+							<div class="substep-tab" data-step="4" data-substep="F" onclick="switchSubstep(4, 'F')">4F: Exam Style Questions</div>
+							<div class="substep-tab" data-step="4" data-substep="G" onclick="switchSubstep(4, 'G')">4G: Worksheet Finalization</div>
+							<div class="nav-scroll-indicator nav-scroll-right" onclick="scrollSubstepNav('right')">▶</div>
+						</div>
+						
+						<!-- Substep 4A: Reference Materials -->
+						<div class="substep-content active" data-step="4" data-substep="A">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Reference Materials</h3>
+								</div>
+								
+								<div class="alert alert-info">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+									<div>
+										Create reference materials for your worksheet, including key definitions, formulas, diagrams, and examples that students will need to complete the activities.
+									</div>
+								</div>
+								
+								<!-- Learning Objectives Summary -->
+								<div id="learningObjectivesForWorksheets" class="response-display" style="max-height: none; margin-bottom: 1.5rem;">
+									<p>Please complete Step 1 first to see learning objectives here.</p>
+								</div>
+								
+								<div class="prompt-response-container">
+									<div class="prompt-area">
+										<div class="area-header">
+											<h4 class="area-title">Generate Reference Materials</h4>
+											<button id="generateReferenceMaterialsPromptBtn" class="btn btn-secondary btn-sm">Generate Prompt</button>
+										</div>
+										<div class="textarea-container">
+											<textarea id="referenceMaterialsPromptTextarea" class="prompt-textarea" readonly placeholder="Click 'Generate Prompt' to create reference materials..."></textarea>
+											<button id="copyReferenceMaterialsPromptBtn" class="copy-btn">Copy</button>
+										</div>
+									</div>
+									
+									<div class="response-area">
+										<div class="area-header">
+											<h4 class="area-title">Claude's Response</h4>
+											<button id="previewReferenceMaterialsResponseBtn" class="btn btn-outline btn-sm">Preview</button>
+										</div>
+										<div class="textarea-container">
+											<textarea id="referenceMaterialsResponseTextarea" class="response-textarea" placeholder="Paste Claude's response here..."></textarea>
+										</div>
+										<p class="response-instructions">Paste Claude's full response including all XML tags</p>
+										
+										<div id="referenceMaterialsPreview" class="response-preview">
+											<div class="response-tabs">
+												<div class="response-tab active" data-tab="referenceMaterialsFormatted">Formatted</div>
+												<div class="response-tab" data-tab="referenceMaterialsTagged">Tagged</div>
+											</div>
+											<div class="response-display">
+												<div class="response-content active" id="referenceMaterialsFormattedResponse"></div>
+												<div class="response-content" id="referenceMaterialsTaggedResponse"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Reference Materials Sections -->
+								<div id="referenceMaterialsEditContainer" style="margin-top: 2rem; display: none;">
+									<h4>Reference Materials</h4>
+									
+									<!-- Definitions -->
+									<div class="reference-section">
+										<div class="reference-section-header">
+											<h5>Definitions</h5>
+											<button class="edit-button" id="editDefinitionsBtn">Edit</button>
+										</div>
+										<div id="definitionsContent" class="reference-section-content">
+											<p>No definitions available yet.</p>
+										</div>
+									</div>
+									
+									<!-- Formulas -->
+									<div class="reference-section">
+										<div class="reference-section-header">
+											<h5>Formulas</h5>
+											<button class="edit-button" id="editFormulasBtn">Edit</button>
+										</div>
+										<div id="formulasContent" class="reference-section-content">
+											<p>No formulas available yet.</p>
+										</div>
+									</div>
+									
+									<!-- Diagrams -->
+									<div class="reference-section">
+										<div class="reference-section-header">
+											<h5>Diagrams</h5>
+											<button class="edit-button" id="editDiagramsBtn">Edit</button>
+										</div>
+										<div id="diagramsContent" class="reference-section-content">
+											<p>No diagrams available yet.</p>
+										</div>
+									</div>
+									
+									<!-- Examples -->
+									<div class="reference-section">
+										<div class="reference-section-header">
+											<h5>Examples</h5>
+											<button class="edit-button" id="editExamplesBtn">Edit</button>
+										</div>
+										<div id="examplesContent" class="reference-section-content">
+											<p>No examples available yet.</p>
+										</div>
+									</div>
+								</div>
+								
+								<div class="nav-buttons">
+									<button class="btn btn-outline" onclick="switchSubstep(3, 'D')">Back to Step 3</button>
+									<div class="nav-buttons-right">
+										<button id="continueToRetrievalBtn" class="btn btn-primary" disabled>Continue to Prior Knowledge Retrieval</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Substep 4B: Prior Knowledge Retrieval -->
+						<div class="substep-content" data-step="4" data-substep="B">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Prior Knowledge Retrieval</h3>
+								</div>
+								
+								<div class="alert alert-info">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+									<div>
+										Create retrieval practice questions based on the prior knowledge needed for each learning objective. These will be included at the beginning of your worksheet.
+									</div>
+								</div>
+								
+								<!-- Prior Knowledge Summary -->
+								<div id="priorKnowledgeForWorksheets" class="response-display" style="max-height: none; margin-bottom: 1.5rem;">
+									<p>Please complete Step 1D first to see prior knowledge here.</p>
+								</div>
+								
+								<!-- Worksheet Tabs -->
+								<div class="worksheet-tabs-container" id="worksheetTabsB">
+									<!-- Tabs will be inserted dynamically -->
+								</div>
+								
+								<div class="prompt-response-container">
+									<div class="prompt-area">
+										<div class="area-header">
+											<h4 class="area-title">Generate Retrieval Questions</h4>
+											<button id="generateRetrievalWorksheetPromptBtn" class="btn btn-secondary btn-sm">Generate Prompt</button>
+										</div>
+										<div class="textarea-container">
+											<textarea id="retrievalWorksheetPromptTextarea" class="prompt-textarea" readonly placeholder="Click 'Generate Prompt' to create retrieval questions..."></textarea>
+											<button id="copyRetrievalWorksheetPromptBtn" class="copy-btn">Copy</button>
+										</div>
+									</div>
+									
+									<div class="response-area">
+										<div class="area-header">
+											<h4 class="area-title">Claude's Response</h4>
+											<button id="previewRetrievalWorksheetResponseBtn" class="btn btn-outline btn-sm">Preview</button>
+										</div>
+										<div class="textarea-container">
+											<textarea id="retrievalWorksheetResponseTextarea" class="response-textarea" placeholder="Paste Claude's response here..."></textarea>
+										</div>
+										<p class="response-instructions">Paste Claude's full response including all XML tags</p>
+										
+										<div id="retrievalWorksheetPreview" class="response-preview">
+											<div class="response-tabs">
+												<div class="response-tab active" data-tab="retrievalWorksheetFormatted">Formatted</div>
+												<div class="response-tab" data-tab="retrievalWorksheetTagged">Tagged</div>
+											</div>
+											<div class="response-display">
+												<div class="response-content active" id="retrievalWorksheetFormattedResponse"></div>
+												<div class="response-content" id="retrievalWorksheetTaggedResponse"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Retrieval Questions by Worksheet -->
+								<div class="worksheet-content-container">
+									<!-- Worksheet 1 Content -->
+									<div class="worksheet-content active" data-substep="B" data-worksheet="1">
+										<div id="retrievalWorksheetEditContainer" style="margin-top: 2rem; display: none;">
+											<div class="edit-header">
+												<h4>Retrieval Questions</h4>
+												<button class="btn btn-outline" id="editRetrievalWorksheetQuestionsBtn">Edit Questions</button>
+											</div>
+											<div id="retrievalQuestionsWS1" class="retrieval-questions-container">
+												<p>No retrieval questions available yet.</p>
+											</div>
+										</div>
+									</div>
+									
+									<!-- Worksheet 2 Content -->
+									<div class="worksheet-content" data-substep="B" data-worksheet="2">
+										<div id="retrievalWorksheetEditContainer2" style="margin-top: 2rem; display: none;">
+											<div class="edit-header">
+												<h4>Retrieval Questions</h4>
+												<button class="btn btn-outline" id="editRetrievalWorksheetQuestionsBtn2">Edit Questions</button>
+											</div>
+											<div id="retrievalQuestionsWS2" class="retrieval-questions-container">
+												<p>No retrieval questions available yet.</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="nav-buttons">
+									<button class="btn btn-outline" onclick="switchSubstep(4, 'A')">Back</button>
+									<div class="nav-buttons-right">
+										<button id="continueToScaleQuestionsBtn" class="btn btn-primary" disabled>Continue to SCALE Questions</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Substep 4C: SCALE Questions -->
+						<div class="substep-content" data-step="4" data-substep="C">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">SCALE Framework Questions</h3>
+								</div>
+								
+								<div class="alert alert-info">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+									<div>
+										Create SCALE framework questions (Simple Recognition, Conceptual Understanding, Application, Linking Ideas, Extended Thinking) for each learning objective. Select questions to include in your worksheet.
+									</div>
+								</div>
+								
+								<!-- Worksheet Tabs -->
+								<div class="worksheet-tabs-container" id="worksheetTabsC">
+									<!-- Tabs will be inserted dynamically -->
+								</div>
+								
+								<div class="prompt-response-container">
+									<div class="prompt-area">
+										<div class="area-header">
+											<h4 class="area-title">Generate SCALE Questions</h4>
+											<button id="generateScaleQuestionsPromptBtn" class="btn btn-secondary btn-sm">Generate Prompt</button>
+										</div>
+										<div class="textarea-container">
+											<textarea id="scaleQuestionsPromptTextarea" class="prompt-textarea" readonly placeholder="Click 'Generate Prompt' to create SCALE questions..."></textarea>
+											<button id="copyScaleQuestionsPromptBtn" class="copy-btn">Copy</button>
+										</div>
+									</div>
+									
+									<div class="response-area">
+										<div class="area-header">
+											<h4 class="area-title">Claude's Response</h4>
+											<button id="previewScaleQuestionsResponseBtn" class="btn btn-outline btn-sm">Preview</button>
+										</div>
+										<div class="textarea-container">
+											<textarea id="scaleQuestionsResponseTextarea" class="response-textarea" placeholder="Paste Claude's response here..."></textarea>
+										</div>
+										<p class="response-instructions">Paste Claude's full response including all XML tags</p>
+										
+										<div id="scaleQuestionsPreview" class="response-preview">
+											<div class="response-tabs">
+												<div class="response-tab active" data-tab="scaleQuestionsFormatted">Formatted</div>
+												<div class="response-tab" data-tab="scaleQuestionsTagged">Tagged</div>
+											</div>
+											<div class="response-display">
+												<div class="response-content active" id="scaleQuestionsFormattedResponse"></div>
+												<div class="response-content" id="scaleQuestionsTaggedResponse"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- SCALE Questions by Worksheet -->
+								<div class="worksheet-content-container">
+									<!-- Worksheet 1 Content -->
+									<div class="worksheet-content active" data-substep="C" data-worksheet="1">
+										<div id="scaleQuestionsEditContainer" style="margin-top: 2rem; display: none;">
+											<div class="edit-header">
+												<h4>SCALE Questions</h4>
+												<button class="btn btn-outline" id="editScaleQuestionsBtn">Edit Questions</button>
+											</div>
+											
+											<!-- LO1 SCALE Questions -->
+											<div class="scale-lo-container" data-lo="1">
+												<h5>Learning Objective 1 SCALE Questions</h5>
+												<p class="scale-description">Select which questions to include in your worksheet:</p>
+												<div id="scaleQuestionsWS1LO1" class="scale-questions-container">
+													<p>No SCALE questions available yet.</p>
+												</div>
+											</div>
+											
+											<!-- LO2 SCALE Questions -->
+											<div class="scale-lo-container" data-lo="2">
+												<h5>Learning Objective 2 SCALE Questions</h5>
+												<p class="scale-description">Select which questions to include in your worksheet:</p>
+												<div id="scaleQuestionsWS1LO2" class="scale-questions-container">
+													<p>No SCALE questions available yet.</p>
+												</div>
+											</div>
+											
+											<!-- LO3 SCALE Questions -->
+											<div class="scale-lo-container" data-lo="3" style="display: none;">
+												<h5>Learning Objective 3 SCALE Questions</h5>
+												<p class="scale-description">Select which questions to include in your worksheet:</p>
+												<div id="scaleQuestionsWS1LO3" class="scale-questions-container">
+													<p>No SCALE questions available yet.</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<!-- Worksheet 2 Content -->
+									<div class="worksheet-content" data-substep="C" data-worksheet="2">
+										<div id="scaleQuestionsEditContainer2" style="margin-top: 2rem; display: none;">
+											<div class="edit-header">
+												<h4>SCALE Questions</h4>
+												<button class="btn btn-outline" id="editScaleQuestionsBtn2">Edit Questions</button>
+											</div>
+											
+											<!-- LO1 SCALE Questions -->
+											<div class="scale-lo-container" data-lo="1">
+												<h5>Learning Objective 1 SCALE Questions</h5>
+												<p class="scale-description">Select which questions to include in your worksheet:</p>
+												<div id="scaleQuestionsWS2LO1" class="scale-questions-container">
+													<p>No SCALE questions available yet.</p>
+												</div>
+											</div>
+											
+											<!-- LO2 SCALE Questions -->
+											<div class="scale-lo-container" data-lo="2">
+												<h5>Learning Objective 2 SCALE Questions</h5>
+												<p class="scale-description">Select which questions to include in your worksheet:</p>
+												<div id="scaleQuestionsWS2LO2" class="scale-questions-container">
+													<p>No SCALE questions available yet.</p>
+												</div>
+											</div>
+											
+											<!-- LO3 SCALE Questions -->
+											<div class="scale-lo-container" data-lo="3" style="display: none;">
+												<h5>Learning Objective 3 SCALE Questions</h5>
+												<p class="scale-description">Select which questions to include in your worksheet:</p>
+												<div id="scaleQuestionsWS2LO3" class="scale-questions-container">
+													<p>No SCALE questions available yet.</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="nav-buttons">
+									<button class="btn btn-outline" onclick="switchSubstep(4, 'B')">Back</button>
+									<div class="nav-buttons-right">
+										<button id="continueToApplicationQuestionsBtn" class="btn btn-primary" disabled>Continue to Application Questions</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Substep 4D: Application Questions -->
+						<div class="substep-content" data-step="4" data-substep="D">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Application Questions</h3>
+								</div>
+								
+								<div class="alert alert-info">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+									<div>
+										Create application questions based on the teaching frameworks chosen in Step 2. These will allow students to apply their knowledge to real-world contexts.
+									</div>
+								</div>
+								
+								<!-- Worksheet Tabs -->
+								<div class="worksheet-tabs-container" id="worksheetTabsD">
+									<!-- Tabs will be inserted dynamically -->
+								</div>
+								
+								<div class="prompt-response-container">
+									<div class="prompt-area">
+										<div class="area-header">
+											<h4 class="area-title">Generate Application Questions</h4>
+											<button id="generateApplicationQuestionsPromptBtn" class="btn btn-secondary btn-sm">Generate Prompt</button>
+										</div>
+										<div class="textarea-container">
+											<textarea id="applicationQuestionsPromptTextarea" class="prompt-textarea" readonly placeholder="Click 'Generate Prompt' to create application questions..."></textarea>
+											<button id="copyApplicationQuestionsPromptBtn" class="copy-btn">Copy</button>
+										</div>
+									</div>
+									
+									<div class="response-area">
+										<div class="area-header">
+											<h4 class="area-title">Claude's Response</h4>
+											<button id="previewApplicationQuestionsResponseBtn" class="btn btn-outline btn-sm">Preview</button>
+										</div>
+										<div class="textarea-container">
+											<textarea id="applicationQuestionsResponseTextarea" class="response-textarea" placeholder="Paste Claude's response here..."></textarea>
+										</div>
+										<p class="response-instructions">Paste Claude's full response including all XML tags</p>
+										
+										<div id="applicationQuestionsPreview" class="response-preview">
+											<div class="response-tabs">
+												<div class="response-tab active" data-tab="applicationQuestionsFormatted">Formatted</div>
+												<div class="response-tab" data-tab="applicationQuestionsTagged">Tagged</div>
+											</div>
+											<div class="response-display">
+												<div class="response-content active" id="applicationQuestionsFormattedResponse"></div>
+												<div class="response-content" id="applicationQuestionsTaggedResponse"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Application Questions by Worksheet -->
+								<div class="worksheet-content-container">
+									<!-- Worksheet 1 Content -->
+									<div class="worksheet-content active" data-substep="D" data-worksheet="1">
+										<div id="applicationQuestionsEditContainer" style="margin-top: 2rem; display: none;">
+											<div class="edit-header">
+												<h4>Application Questions</h4>
+												<button class="btn btn-outline" id="editApplicationQuestionsBtn">Edit Questions</button>
+											</div>
+											
+											<!-- LO1 Application Questions -->
+											<div class="application-lo-container" data-lo="1">
+												<h5>Learning Objective 1 Application Questions</h5>
+												<div id="applicationQuestionsWS1LO1" class="application-questions-container">
+													<p>No application questions available yet.</p>
+												</div>
+											</div>
+											
+											<!-- LO2 Application Questions -->
+											<div class="application-lo-container" data-lo="2">
+												<h5>Learning Objective 2 Application Questions</h5>
+												<div id="applicationQuestionsWS1LO2" class="application-questions-container">
+													<p>No application questions available yet.</p>
+												</div>
+											</div>
+											
+											<!-- LO3 Application Questions -->
+											<div class="application-lo-container" data-lo="3" style="display: none;">
+												<h5>Learning Objective 3 Application Questions</h5>
+												<div id="applicationQuestionsWS1LO3" class="application-questions-container">
+													<p>No application questions available yet.</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<!-- Worksheet 2 Content -->
+									<div class="worksheet-content" data-substep="D" data-worksheet="2">
+										<!-- Similar structure to Worksheet 1 -->
+										<div id="applicationQuestionsEditContainer2" style="margin-top: 2rem; display: none;">
+											<!-- Duplicate structure with different IDs -->
+										</div>
+									</div>
+								</div>
+								
+								<div class="nav-buttons">
+									<button class="btn btn-outline" onclick="switchSubstep(4, 'C')">Back</button>
+									<div class="nav-buttons-right">
+										<button id="continueToExamTechniqueQuestionsBtn" class="btn btn-primary" disabled>Continue to Exam Technique Questions</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Substep 4E: Exam Technique Questions -->
+						<div class="substep-content" data-step="4" data-substep="E">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Exam Technique Questions</h3>
+								</div>
+								
+								<div class="alert alert-info">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+									<div>
+										Create questions that help students practice specific exam techniques identified in Step 2 (BLT, EVERY, MEMES, GRAPH).
+									</div>
+								</div>
+								
+								<!-- Worksheet Tabs -->
+								<div class="worksheet-tabs-container" id="worksheetTabsE">
+									<!-- Tabs will be inserted dynamically -->
+								</div>
+								
+								<div class="prompt-response-container">
+									<div class="prompt-area">
+										<div class="area-header">
+											<h4 class="area-title">Generate Exam Technique Questions</h4>
+											<button id="generateExamTechniqueQuestionsPromptBtn" class="btn btn-secondary btn-sm">Generate Prompt</button>
+										</div>
+										<div class="textarea-container">
+											<textarea id="examTechniqueQuestionsPromptTextarea" class="prompt-textarea" readonly placeholder="Click 'Generate Prompt' to create exam technique questions..."></textarea>
+											<button id="copyExamTechniqueQuestionsPromptBtn" class="copy-btn">Copy</button>
+										</div>
+									</div>
+									
+									<div class="response-area">
+										<div class="area-header">
+											<h4 class="area-title">Claude's Response</h4>
+											<button id="previewExamTechniqueQuestionsResponseBtn" class="btn btn-outline btn-sm">Preview</button>
+										</div>
+										<div class="textarea-container">
+											<textarea id="examTechniqueQuestionsResponseTextarea" class="response-textarea" placeholder="Paste Claude's response here..."></textarea>
+										</div>
+										<p class="response-instructions">Paste Claude's full response including all XML tags</p>
+										
+										<div id="examTechniqueQuestionsPreview" class="response-preview">
+											<div class="response-tabs">
+												<div class="response-tab active" data-tab="examTechniqueQuestionsFormatted">Formatted</div>
+												<div class="response-tab" data-tab="examTechniqueQuestionsTagged">Tagged</div>
+											</div>
+											<div class="response-display">
+												<div class="response-content active" id="examTechniqueQuestionsFormattedResponse"></div>
+												<div class="response-content" id="examTechniqueQuestionsTaggedResponse"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Exam Technique Questions by Worksheet -->
+								<div class="worksheet-content-container">
+									<!-- Similar structure to previous substeps -->
+									<div class="worksheet-content active" data-substep="E" data-worksheet="1">
+										<div id="examTechniqueQuestionsEditContainer" style="margin-top: 2rem; display: none;">
+											<!-- Content for worksheet 1 -->
+										</div>
+									</div>
+									
+									<div class="worksheet-content" data-substep="E" data-worksheet="2">
+										<div id="examTechniqueQuestionsEditContainer2" style="margin-top: 2rem; display: none;">
+											<!-- Content for worksheet 2 -->
+										</div>
+									</div>
+								</div>
+								
+								<div class="nav-buttons">
+									<button class="btn btn-outline" onclick="switchSubstep(4, 'D')">Back</button>
+									<div class="nav-buttons-right">
+										<button id="continueToExamStyleQuestionsBtn" class="btn btn-primary" disabled>Continue to Exam Style Questions</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Substep 4F: Exam Style Questions -->
+						<div class="substep-content" data-step="4" data-substep="F">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Exam Style Questions</h3>
+								</div>
+								
+								<div class="alert alert-info">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+									<div>
+										Create exam-style questions that match the format and style of the selected exam board, providing students with authentic exam practice.
+									</div>
+								</div>
+								
+								<!-- Worksheet Tabs -->
+								<div class="worksheet-tabs-container" id="worksheetTabsF">
+									<!-- Tabs will be inserted dynamically -->
+								</div>
+								
+								<div class="prompt-response-container">
+									<div class="prompt-area">
+										<div class="area-header">
+											<h4 class="area-title">Generate Exam Style Questions</h4>
+											<button id="generateExamStyleQuestionsPromptBtn" class="btn btn-secondary btn-sm">Generate Prompt</button>
+										</div>
+										<div class="textarea-container">
+											<textarea id="examStyleQuestionsPromptTextarea" class="prompt-textarea" readonly placeholder="Click 'Generate Prompt' to create exam style questions..."></textarea>
+											<button id="copyExamStyleQuestionsPromptBtn" class="copy-btn">Copy</button>
+										</div>
+									</div>
+									
+									<div class="response-area">
+										<div class="area-header">
+											<h4 class="area-title">Claude's Response</h4>
+											<button id="previewExamStyleQuestionsResponseBtn" class="btn btn-outline btn-sm">Preview</button>
+										</div>
+										<div class="textarea-container">
+											<textarea id="examStyleQuestionsResponseTextarea" class="response-textarea" placeholder="Paste Claude's response here..."></textarea>
+										</div>
+										<p class="response-instructions">Paste Claude's full response including all XML tags</p>
+										
+										<div id="examStyleQuestionsPreview" class="response-preview">
+											<div class="response-tabs">
+												<div class="response-tab active" data-tab="examStyleQuestionsFormatted">Formatted</div>
+												<div class="response-tab" data-tab="examStyleQuestionsTagged">Tagged</div>
+											</div>
+											<div class="response-display">
+												<div class="response-content active" id="examStyleQuestionsFormattedResponse"></div>
+												<div class="response-content" id="examStyleQuestionsTaggedResponse"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Exam Style Questions by Worksheet -->
+								<div class="worksheet-content-container">
+									<!-- Similar structure to previous substeps -->
+									<div class="worksheet-content active" data-substep="F" data-worksheet="1">
+										<div id="examStyleQuestionsEditContainer" style="margin-top: 2rem; display: none;">
+											<!-- Content for worksheet 1 -->
+										</div>
+									</div>
+									
+									<div class="worksheet-content" data-substep="F" data-worksheet="2">
+										<div id="examStyleQuestionsEditContainer2" style="margin-top: 2rem; display: none;">
+											<!-- Content for worksheet 2 -->
+										</div>
+									</div>
+								</div>
+								
+								<div class="nav-buttons">
+									<button class="btn btn-outline" onclick="switchSubstep(4, 'E')">Back</button>
+									<div class="nav-buttons-right">
+										<button id="continueToWorksheetFinalizationBtn" class="btn btn-primary" disabled>Continue to Worksheet Finalization</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Substep 4G: Worksheet Finalization -->
+						<div class="substep-content" data-step="4" data-substep="G">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Worksheet Finalization</h3>
+								</div>
+								
+								<div class="alert alert-info">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+									<div>
+										Finalize your worksheet settings, including answer display options, formatting preferences, and layout settings.
+									</div>
+								</div>
+								
+								<!-- Worksheet Tabs -->
+								<div class="worksheet-tabs-container" id="worksheetTabsG">
+									<!-- Tabs will be inserted dynamically -->
+								</div>
+								
+								<!-- Finalization Settings by Worksheet -->
+								<div class="worksheet-content-container">
+									<!-- Worksheet 1 Content -->
+									<div class="worksheet-content active" data-substep="G" data-worksheet="1">
+										<h4>Worksheet 1 Settings</h4>
+										
+										<div class="finalization-section">
+											<h5>Answer Display</h5>
+											<div class="radio-group">
+												<div class="radio-container">
+													<input type="radio" id="answerDisplaySeparate1" name="answerDisplay1" value="Separate" checked>
+													<label for="answerDisplaySeparate1">Separate answer sheet</label>
+												</div>
+												<div class="radio-container">
+													<input type="radio" id="answerDisplayEnd1" name="answerDisplay1" value="EndOfSheet">
+													<label for="answerDisplayEnd1">At end of worksheet</label>
+												</div>
+												<div class="radio-container">
+													<input type="radio" id="answerDisplayNone1" name="answerDisplay1" value="None">
+													<label for="answerDisplayNone1">No answers</label>
+												</div>
+											</div>
+										</div>
+										
+										<div class="finalization-section">
+											<h5>Content Options</h5>
+											<div class="checkbox-container">
+												<input type="checkbox" id="includeSentenceStarters1" checked>
+												<label for="includeSentenceStarters1">Include sentence starters for extended responses</label>
+											</div>
+											
+											<h5 class="mt-3">Answer Line Style</h5>
+											<div class="radio-group">
+												<div class="radio-container">
+													<input type="radio" id="answerLineNone1" name="answerLineStyle1" value="None">
+													<label for="answerLineNone1">No lines</label>
+												</div>
+												<div class="radio-container">
+													<input type="radio" id="answerLineSingle1" name="answerLineStyle1" value="Single" checked>
+													<label for="answerLineSingle1">Single lines</label>
+												</div>
+												<div class="radio-container">
+													<input type="radio" id="answerLineMultiple1" name="answerLineStyle1" value="Multiple">
+													<label for="answerLineMultiple1">Multiple lines</label>
+												</div>
+												<div class="radio-container">
+													<input type="radio" id="answerLineBoxed1" name="answerLineStyle1" value="Boxed">
+													<label for="answerLineBoxed1">Boxed areas</label>
+												</div>
+											</div>
+											
+											<div class="checkbox-container mt-3">
+												<input type="checkbox" id="showPoints1" checked>
+												<label for="showPoints1">Show available points for each question</label>
+											</div>
+										</div>
+										
+										<div class="finalization-section">
+											<h5>Section Labeling</h5>
+											<div class="radio-group">
+												<div class="radio-container">
+													<input type="radio" id="sectionLabelingNumbered1" name="sectionLabeling1" value="Numbered" checked>
+													<label for="sectionLabelingNumbered1">Numbered sections (1, 2, 3)</label>
+												</div>
+												<div class="radio-container">
+													<input type="radio" id="sectionLabelingLettered1" name="sectionLabeling1" value="Lettered">
+													<label for="sectionLabelingLettered1">Lettered sections (A, B, C)</label>
+												</div>
+												<div class="radio-container">
+													<input type="radio" id="sectionLabelingNamed1" name="sectionLabeling1" value="Named">
+													<label for="sectionLabelingNamed1">Named sections</label>
+												</div>
+											</div>
+										</div>
+										
+										<div class="finalization-section">
+											<h5>Paper Size & Orientation</h5>
+											<div class="radio-group">
+												<div class="radio-container">
+													<input type="radio" id="paperSizeA4-1" name="paperSize1" value="A4" checked>
+													<label for="paperSizeA4-1">A4</label>
+												</div>
+												<div class="radio-container">
+													<input type="radio" id="paperSizeA3-1" name="paperSize1" value="A3">
+													<label for="paperSizeA3-1">A3</label>
+												</div>
+												<div class="radio-container">
+													<input type="radio" id="paperSizeLetter1" name="paperSize1" value="Letter">
+													<label for="paperSizeLetter1">Letter</label>
+												</div>
+											</div>
+											
+											<div class="radio-group mt-3">
+												<div class="radio-container">
+													<input type="radio" id="orientationPortrait1" name="orientation1" value="Portrait" checked>
+													<label for="orientationPortrait1">Portrait</label>
+												</div>
+												<div class="radio-container">
+													<input type="radio" id="orientationLandscape1" name="orientation1" value="Landscape">
+													<label for="orientationLandscape1">Landscape</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<!-- Worksheet 2 Content -->
+									<div class="worksheet-content" data-substep="G" data-worksheet="2">
+										<h4>Worksheet 2 Settings</h4>
+										
+										<!-- Duplicate of Worksheet 1 settings but with different IDs -->
+										<div class="finalization-section">
+											<h5>Answer Display</h5>
+											<div class="radio-group">
+												<div class="radio-container">
+													<input type="radio" id="answerDisplaySeparate2" name="answerDisplay2" value="Separate" checked>
+													<label for="answerDisplaySeparate2">Separate answer sheet</label>
+												</div>
+												<div class="radio-container">
+													<input type="radio" id="answerDisplayEnd2" name="answerDisplay2" value="EndOfSheet">
+													<label for="answerDisplayEnd2">At end of worksheet</label>
+												</div>
+												<div class="radio-container">
+													<input type="radio" id="answerDisplayNone2" name="answerDisplay2" value="None">
+													<label for="answerDisplayNone2">No answers</label>
+												</div>
+											</div>
+										</div>
+										
+										<!-- Additional settings sections with "2" suffix in IDs -->
+									</div>
+								</div>
+								
+								<div class="apply-settings-container">
+									<button id="applyFinalizationSettingsBtn" class="btn btn-secondary">Apply Settings</button>
+								</div>
+								
+								<div class="prompt-response-container">
+									<div class="prompt-area">
+										<div class="area-header">
+											<h4 class="area-title">Generate Worksheet Preview</h4>
+											<button id="generateWorksheetFinalizationPromptBtn" class="btn btn-secondary btn-sm">Generate Prompt</button>
+										</div>
+										<div class="textarea-container">
+											<textarea id="worksheetFinalizationPromptTextarea" class="prompt-textarea" readonly placeholder="Apply settings first, then click 'Generate Prompt'..."></textarea>
+											<button id="copyWorksheetFinalizationPromptBtn" class="copy-btn">Copy</button>
+										</div>
+									</div>
+									
+									<div class="response-area">
+										<div class="area-header">
+											<h4 class="area-title">Claude's Response</h4>
+											<button id="previewWorksheetFinalizationResponseBtn" class="btn btn-outline btn-sm">Preview</button>
+										</div>
+										<div class="textarea-container">
+											<textarea id="worksheetFinalizationResponseTextarea" class="response-textarea" placeholder="Paste Claude's response here..."></textarea>
+										</div>
+										<p class="response-instructions">Paste Claude's full response including all XML tags</p>
+										
+										<div id="worksheetFinalizationPreview" class="response-preview">
+											<div class="response-tabs">
+												<div class="response-tab active" data-tab="worksheetFinalizationFormatted">Formatted</div>
+												<div class="response-tab" data-tab="worksheetFinalizationTagged">Tagged</div>
+											</div>
+											<div class="response-display">
+												<div class="response-content active" id="worksheetFinalizationFormattedResponse"></div>
+												<div class="response-content" id="worksheetFinalizationTaggedResponse"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Worksheet Preview -->
+								<div id="worksheetPreviewContainer" style="margin-top: 2rem; display: none;">
+									<div class="worksheet-content-container">
+										<!-- Worksheet 1 Preview -->
+										<div class="worksheet-content active" data-substep="G" data-worksheet="1">
+											<div id="worksheetPreviewWS1" class="worksheet-preview">
+												<p>Generate a preview to see how your worksheet will look.</p>
+											</div>
+										</div>
+										
+										<!-- Worksheet 2 Preview -->
+										<div class="worksheet-content" data-substep="G" data-worksheet="2">
+											<div id="worksheetPreviewWS2" class="worksheet-preview">
+												<p>Generate a preview to see how your worksheet will look.</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="preview-action-container" style="margin-top: 1rem;">
+									<button id="generateWorksheetPreviewBtn" class="btn btn-secondary" disabled>Generate Worksheet Preview</button>
+								</div>
+								
+								<div class="nav-buttons">
+									<button class="btn btn-outline" onclick="switchSubstep(4, 'F')">Back</button>
+									<div class="nav-buttons-right">
+										<button id="finishStep4Btn" class="btn btn-primary" disabled>Complete Worksheet Generation</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+
+<!-- Step 5: Export and Integration -->
+<div class="main-step main-step-5" id="mainStep5">
+    <div class="main-step-header" onclick="toggleMainStep(5)">
+        <div class="main-step-number">5</div>
+        <div class="main-step-title">Export and Integration</div>
+        <div class="main-step-status status-not-started">Not Started</div>
+        <div class="toggle-icon">▼</div>
+    </div>
+    <div class="main-step-content" id="mainStepContent5">
+        <div class="main-step-inner">
+            <!-- Substeps Navigation -->
+            <div class="substeps-nav">
+                <div class="nav-scroll-indicator nav-scroll-left" onclick="scrollSubstepNav('left')">◀</div>
+                <div class="substep-tab active" data-step="5" data-substep="A" onclick="switchSubstep(5, 'A')">5A: Save/Load Options</div>
+                <div class="substep-tab" data-step="5" data-substep="B" onclick="switchSubstep(5, 'B')">5B: Export Slides</div>
+                <div class="substep-tab" data-step="5" data-substep="C" onclick="switchSubstep(5, 'C')">5C: Export Worksheets</div>
+                <div class="substep-tab" data-step="5" data-substep="D" onclick="switchSubstep(5, 'D')">5D: Complete Package</div>
+                <div class="nav-scroll-indicator nav-scroll-right" onclick="scrollSubstepNav('right')">▶</div>
+            </div>
+            
+            <!-- Substep 5A: Save/Load Options -->
+            <div class="substep-content active" data-step="5" data-substep="A">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Save & Load Lesson Plan</h3>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        <div>
+                            Save your lesson plan to your browser's local storage or load a previously saved lesson plan. This allows you to continue working on your lesson plan later.
+                        </div>
+                    </div>
+                    
+                    <div id="saveStatusContainer"></div>
+                    
+                    <div class="save-load-container">
+                        <div class="save-container">
+                            <h4>Save Current Lesson Plan</h4>
+                            <p>Save your lesson plan to continue working on it later. This will save all your progress to your browser's local storage.</p>
+                            <button id="saveLessonBtn" class="btn btn-primary">Save Lesson Plan</button>
+                        </div>
+                        
+                        <div class="load-container">
+                            <h4>Load Saved Lesson Plan</h4>
+                            <p>Load a previously saved lesson plan. This will replace your current progress with the saved state.</p>
+                            <button id="loadLessonBtn" class="btn btn-secondary">Load Lesson Plan</button>
+                        </div>
+                    </div>
+                    
+                    <div class="auto-save-container">
+                        <h4>Auto-Save Settings</h4>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="enableAutoSave" checked>
+                            <label for="enableAutoSave">Enable automatic saving every</label>
+                            <select id="autoSaveInterval" class="form-control-sm">
+                                <option value="1">1 minute</option>
+                                <option value="5" selected>5 minutes</option>
+                                <option value="10">10 minutes</option>
+                                <option value="15">15 minutes</option>
+                                <option value="30">30 minutes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button class="btn btn-outline" onclick="switchSubstep(4, 'G')">Back to Step 4</button>
+                        <div class="nav-buttons-right">
+                            <button class="btn btn-primary" onclick="switchSubstep(5, 'B')">Continue to Export Slides</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Substep 5B: Export Slides -->
+            <div class="substep-content" data-step="5" data-substep="B">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Export Slide Presentation</h3>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        <div>
+                            Export your slides in a format compatible with PowerPoint or other presentation software. You can customize export options below.
+                        </div>
+                    </div>
+                    
+                    <div id="slidesExportStatusContainer"></div>
+                    
+                    <div class="export-settings-container">
+                        <h4>Slide Export Settings</h4>
+                        
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="includeSlidesNotes" checked>
+                            <label for="includeSlidesNotes">Include teacher notes in export</label>
+                        </div>
+                        
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="includeVisualPlaceholders" checked>
+                            <label for="includeVisualPlaceholders">Include visual element placeholders</label>
+                        </div>
+                    </div>
+                    
+                    <div class="slides-preview-container">
+                        <h4>Slides Preview</h4>
+                        <div class="slides-preview">
+                            <p>Your presentation will include:</p>
+                            <ul>
+                                <li>Title slide with lesson information</li>
+                                <li>Retrieval practice section with <span id="retrievalSlideCount">0</span> slides</li>
+                                <li>Teaching content sections with <span id="teachingSlideCount">0</span> total slides</li>
+                                <li>Formative assessment section with <span id="formativeSlideCount">0</span> slides</li>
+                                <li>Conclusion slide</li>
+                            </ul>
+                            <p>Total slides: <span id="totalSlideCount">0</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="export-buttons-container">
+                        <button id="exportSlidesBtn" class="btn btn-primary">Export Slides XML</button>
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button class="btn btn-outline" onclick="switchSubstep(5, 'A')">Back</button>
+                        <div class="nav-buttons-right">
+                            <button class="btn btn-primary" onclick="switchSubstep(5, 'C')">Continue to Export Worksheets</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Substep 5C: Export Worksheets -->
+            <div class="substep-content" data-step="5" data-substep="C">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Export Worksheets</h3>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        <div>
+                            Export your worksheets in XML format for printing or further editing. You can export individual worksheets or all at once.
+                        </div>
+                    </div>
+                    
+                    <div id="worksheetExportStatusContainer"></div>
+                    
+                    <div class="export-settings-container">
+                        <h4>Worksheet Export Settings</h4>
+                        
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="includeWorksheetAnswers" checked>
+                            <label for="includeWorksheetAnswers">Include answers in export</label>
+                        </div>
+                        
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="includeMarkingGuidelines" checked>
+                            <label for="includeMarkingGuidelines">Include marking guidelines</label>
+                        </div>
+                    </div>
+                    
+                    <div class="worksheets-preview-container">
+                        <h4>Worksheets Preview</h4>
+                        <div class="worksheets-preview" id="worksheetsPreviewContainer">
+                            <!-- Worksheet summaries will be added here -->
+                        </div>
+                    </div>
+                    
+                    <div class="export-buttons-container">
+                        <button id="exportWorksheet1Btn" class="btn btn-secondary">Export Worksheet 1 XML</button>
+                        <button id="exportWorksheet2Btn" class="btn btn-secondary" style="display: none;">Export Worksheet 2 XML</button>
+                        <button id="exportAllWorksheetsBtn" class="btn btn-primary">Export All Worksheets</button>
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button class="btn btn-outline" onclick="switchSubstep(5, 'B')">Back</button>
+                        <div class="nav-buttons-right">
+                            <button class="btn btn-primary" onclick="switchSubstep(5, 'D')">Continue to Complete Package</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Substep 5D: Complete Package -->
+            <div class="substep-content" data-step="5" data-substep="D">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Export Complete Lesson Package</h3>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        <div>
+                            Export a complete package containing all lesson components (slides and worksheets) along with metadata for integration with classroom systems.
+                        </div>
+                    </div>
+                    
+                    <div id="packageExportStatusContainer"></div>
+                    
+                    <div class="package-summary-container">
+                        <h4>Package Summary</h4>
+                        <div class="package-summary">
+                            <p><strong>Lesson Title:</strong> <span id="packageLessonTitle">-</span></p>
+                            <p><strong>Subject:</strong> <span id="packageSubject">-</span> | <strong>Topic:</strong> <span id="packageTopic">-</span></p>
+                            <p><strong>Exam Board:</strong> <span id="packageProvider">-</span> | <strong>Level:</strong> <span id="packageLevel">-</span></p>
+                            <p><strong>Contents:</strong></p>
+                            <ul>
+                                <li>Slide Presentation (<span id="packageSlideCount">0</span> slides)</li>
+                                <li><span id="packageWorksheetCount">0</span> Worksheet(s)</li>
+                                <li>Full lesson state for future editing</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="export-buttons-container">
+                        <button id="updateExportSettingsBtn" class="btn btn-secondary">Update Export Settings</button>
+                        <button id="exportPackageBtn" class="btn btn-primary">Export Complete Package</button>
+                    </div>
+                    
+                    <div class="completion-message">
+                        <div class="alert alert-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            <div>
+                                <p><strong>Congratulations!</strong></p>
+                                <p>You have completed the lesson planning process. Your lesson plan includes slides and worksheets tailored to your learning objectives.</p>
+                                <p>Export your complete package to finalize your work.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button class="btn btn-outline" onclick="switchSubstep(5, 'C')">Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Edit Modals -->
+    <!-- LO Type Edit Modal -->
+    <div class="modal-overlay" id="loTypeEditModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Learning Objective Type</h3>
+                <button class="modal-close" onclick="closeModal('loTypeEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="editLoNumber">Learning Objective:</label>
+                    <select id="editLoNumber" class="form-control" disabled>
+                        <option value="1">Learning Objective 1</option>
+                        <option value="2">Learning Objective 2</option>
+                        <option value="3">Learning Objective 3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editAoCategory">Assessment Objective:</label>
+                    <select id="editAoCategory" class="form-control">
+                        <option value="AO1">AO1 - Knowledge & Recall</option>
+                        <option value="AO2">AO2 - Application</option>
+                        <option value="AO3">AO3 - Analysis & Evaluation</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editSpecificType">Specific Type:</label>
+                    <select id="editSpecificType" class="form-control">
+                        <!-- Options will be populated based on AO category -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editTypeJustification">Justification:</label>
+                    <textarea id="editTypeJustification" class="form-control" rows="4"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('loTypeEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveLoTypeBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Misconceptions Edit Modal -->
+    <div class="modal-overlay" id="misconceptionsEditModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Misconceptions</h3>
+                <button class="modal-close" onclick="closeModal('misconceptionsEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="editMisconceptionsLoNumber">Learning Objective:</label>
+                    <select id="editMisconceptionsLoNumber" class="form-control" disabled>
+                        <option value="1">Learning Objective 1</option>
+                        <option value="2">Learning Objective 2</option>
+                        <option value="3">Learning Objective 3</option>
+                    </select>
+                </div>
+                <div id="misconceptionsEditList">
+                    <!-- Misconceptions will be added here -->
+                </div>
+                <button class="btn btn-outline btn-sm" id="addMisconceptionBtn" style="margin-top: 0.5rem;">+ Add Misconception</button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('misconceptionsEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveMisconceptionsBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prior Knowledge Edit Modal -->
+    <div class="modal-overlay" id="priorKnowledgeEditModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Prior Knowledge</h3>
+                <button class="modal-close" onclick="closeModal('priorKnowledgeEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="editPriorKnowledgeLoNumber">Learning Objective:</label>
+                    <select id="editPriorKnowledgeLoNumber" class="form-control" disabled>
+                        <option value="1">Learning Objective 1</option>
+                        <option value="2">Learning Objective 2</option>
+                        <option value="3">Learning Objective 3</option>
+                    </select>
+                </div>
+                <div id="priorKnowledgeEditList">
+                    <!-- Prior knowledge items will be added here -->
+                </div>
+                <button class="btn btn-outline btn-sm" id="addPriorKnowledgeBtn" style="margin-top: 0.5rem;">+ Add Prior Knowledge Item</button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('priorKnowledgeEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="savePriorKnowledgeBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 2 Modals -->
+    <!-- Framework Edit Modal -->
+    <div class="modal-overlay" id="frameworkEditModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Framework Assignment</h3>
+                <button class="modal-close" onclick="closeModal('frameworkEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="editFrameworkLoNumber">Learning Objective:</label>
+                    <select id="editFrameworkLoNumber" class="form-control" disabled>
+                        <option value="1">Learning Objective 1</option>
+                        <option value="2">Learning Objective 2</option>
+                        <option value="3">Learning Objective 3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editPrimaryFramework">Primary Framework:</label>
+                    <select id="editPrimaryFramework" class="form-control">
+                        <option value="CER">CER - Claim, Evidence, Reasoning</option>
+                        <option value="POE">POE - Predict, Observe, Explain</option>
+                        <option value="SOLO">SOLO Taxonomy</option>
+                        <option value="PEEL">PEEL - Point, Evidence, Explain, Link</option>
+                        <option value="SEEC">SEEC - State, Explain, Example, Connection</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">BLT Supplementary Approach:</label>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="editBltUsed">
+                        <label for="editBltUsed">Apply BLT framework for this learning objective</label>
+                    </div>
+                </div>
+                <div id="bltLevelsContainer" style="display: none;">
+                    <p>Select the Bloom's Taxonomy levels to focus on:</p>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="editBltRemember">
+                        <label for="editBltRemember">Remember</label>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="editBltUnderstand">
+                        <label for="editBltUnderstand">Understand</label>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="editBltApply">
+                        <label for="editBltApply">Apply</label>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="editBltAnalyze">
+                        <label for="editBltAnalyze">Analyze</label>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="editBltEvaluate">
+                        <label for="editBltEvaluate">Evaluate</label>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="editBltCreate">
+                        <label for="editBltCreate">Create</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('frameworkEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveFrameworkBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exam Technique Edit Modal -->
+    <div class="modal-overlay" id="examTechniqueEditModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Exam Techniques</h3>
+                <button class="modal-close" onclick="closeModal('examTechniqueEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="editTechniqueLoNumber">Learning Objective:</label>
+                    <select id="editTechniqueLoNumber" class="form-control" disabled>
+                        <option value="1">Learning Objective 1</option>
+                        <option value="2">Learning Objective 2</option>
+                        <option value="3">Learning Objective 3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Select Exam Techniques:</label>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="editTechniqueBLT">
+                        <label for="editTechniqueBLT">BLT - Because, Link, Therefore</label>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="editTechniqueEVERY">
+                        <label for="editTechniqueEVERY">EVERY - Equation, Values, Equals, Rearrange, Y=Answer</label>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="editTechniqueMEMES">
+                        <label for="editTechniqueMEMES">MEMES - Method, Equipment, Measurements, Evaluation, Safety</label>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="editTechniqueGRAPH">
+                        <label for="editTechniqueGRAPH">GRAPH - Grid, Right scale, Axis labeled, Plot, Head (title)</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editExamNotes">Additional Notes (Optional):</label>
+                    <textarea id="editExamNotes" class="form-control" rows="3" placeholder="Add any specific instructions or focus areas for exam technique"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('examTechniqueEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveExamTechniqueBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Practical Requirements Edit Modal -->
+    <div class="modal-overlay" id="practicalEditModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Practical Requirements</h3>
+                <button class="modal-close" onclick="closeModal('practicalEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="editPracticalLoNumber">Learning Objective:</label>
+                    <select id="editPracticalLoNumber" class="form-control" disabled>
+                        <option value="1">Learning Objective 1</option>
+                        <option value="2">Learning Objective 2</option>
+                        <option value="3">Learning Objective 3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editPracticalTitle">Practical Title:</label>
+                    <input type="text" id="editPracticalTitle" class="form-control" placeholder="Enter a title for this practical activity">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editPracticalAim">Aim:</label>
+                    <textarea id="editPracticalAim" class="form-control" rows="2" placeholder="Enter the aim of the practical"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Variables:</label>
+                    <div id="variablesContainer">
+                        <!-- Variables will be added here -->
+                    </div>
+                    <button class="btn btn-outline btn-sm" id="addVariableBtn" style="margin-top: 0.5rem;">+ Add Variable</button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Equipment:</label>
+                    <div id="equipmentContainer">
+                        <!-- Equipment will be added here -->
+                    </div>
+                    <button class="btn btn-outline btn-sm" id="addEquipmentBtn" style="margin-top: 0.5rem;">+ Add Equipment</button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Steps:</label>
+                    <div id="stepsContainer">
+                        <!-- Steps will be added here -->
+                    </div>
+                    <button class="btn btn-outline btn-sm" id="addStepBtn" style="margin-top: 0.5rem;">+ Add Step</button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editPracticalSafety">Safety Considerations:</label>
+                    <textarea id="editPracticalSafety" class="form-control" rows="3" placeholder="Enter any safety considerations"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('practicalEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="savePracticalBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Frayer Model Edit Modal -->
+    <div class="modal-overlay" id="frayerModelEditModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Frayer Model</h3>
+                <button class="modal-close" onclick="closeModal('frayerModelEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="editFrayerLoNumber">Learning Objective:</label>
+                    <select id="editFrayerLoNumber" class="form-control" disabled>
+                        <option value="1">Learning Objective 1</option>
+                        <option value="2">Learning Objective 2</option>
+                        <option value="3">Learning Objective 3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editFrayerType">Frayer Model Type:</label>
+                    <select id="editFrayerType" class="form-control">
+                        <option value="equation">Equations</option>
+                        <option value="quantity">Physical Quantities</option>
+                        <option value="structure">Biological Structures</option>
+                        <option value="substance">Scientific Substances</option>
+                        <option value="process">Scientific Processes/Cycles</option>
+                        <option value="law">Scientific Laws/Theories</option>
+                        <option value="classification">Scientific Classifications</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editFrayerTerm">Target Term/Concept:</label>
+                    <input type="text" id="editFrayerTerm" class="form-control" placeholder="Enter the key term or concept">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editFrayerDefinition">Definition:</label>
+                    <textarea id="editFrayerDefinition" class="form-control" rows="2" placeholder="Enter a clear, concise definition"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Examples:</label>
+                    <div id="examplesContainer">
+                        <!-- Examples will be added here -->
+                    </div>
+                    <button class="btn btn-outline btn-sm" id="addExampleBtn" style="margin-top: 0.5rem;">+ Add Example</button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Non-Examples:</label>
+                    <div id="nonExamplesContainer">
+                        <!-- Non-examples will be added here -->
+                    </div>
+                    <button class="btn btn-outline btn-sm" id="addNonExampleBtn" style="margin-top: 0.5rem;">+ Add Non-Example</button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editFrayerCharacteristics">Essential Characteristics:</label>
+                    <textarea id="editFrayerCharacteristics" class="form-control" rows="2" placeholder="Enter essential characteristics or properties"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('frayerModelEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveFrayerModelBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+<!-- Step 3 Modals -->
+    <!-- Retrieval Questions Edit Modal -->
+    <div class="modal-overlay" id="retrievalQuestionsEditModal">
+        <div class="modal-container modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Retrieval Questions</h3>
+                <button class="modal-close" onclick="closeModal('retrievalQuestionsEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="retrievalQuestionsContainer">
+                    <!-- Questions will be added here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('retrievalQuestionsEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveRetrievalQuestionsBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teaching Slides Edit Modal -->
+    <div class="modal-overlay" id="teachingSlidesEditModal">
+        <div class="modal-container modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Teaching Slides</h3>
+                <button class="modal-close" onclick="closeModal('teachingSlidesEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="slides-modal-container">
+                    <div class="slides-tab-container" id="teachingSlidesTabContainer">
+                        <!-- Tabs will be added here -->
+                    </div>
+                    <div class="slides-content-container" id="teachingSlidesContentContainer">
+                        <!-- Content will be added here -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('teachingSlidesEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveTeachingSlidesBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Individual Teaching Slide Edit Modal -->
+    <div class="modal-overlay" id="teachingSlideEditModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Slide</h3>
+                <button class="modal-close" onclick="closeModal('teachingSlideEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editSlideLoNumber">
+                <input type="hidden" id="editSlideIndex">
+                
+                <div class="form-group">
+                    <label class="form-label" for="editSlideType">Slide Type:</label>
+                    <select id="editSlideType" class="form-control">
+                        <option value="introduction">Introduction (Hook/Engagement)</option>
+                        <option value="keyContent">Key Content (Main Teaching Points)</option>
+                        <option value="framework">Framework-Based Structure</option>
+                        <option value="practical">Practical Activity</option>
+                        <option value="frayerModel">Frayer Model</option>
+                        <option value="misconception">Addressing Misconceptions</option>
+                        <option value="summary">Summary (Review Key Points)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editSlideTitle">Slide Title:</label>
+                    <input type="text" id="editSlideTitle" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editSlideContent">Slide Content:</label>
+                    <textarea id="editSlideContent" class="form-control" rows="5"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editSlideVisuals">Visual Elements (Optional):</label>
+                    <textarea id="editSlideVisuals" class="form-control" rows="3" placeholder="Describe any diagrams, images, or visual elements that should be included"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editSlideNotes">Teacher Notes (Optional):</label>
+                    <textarea id="editSlideNotes" class="form-control" rows="3" placeholder="Add any delivery notes for the teacher"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('teachingSlideEditModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveTeachingSlide()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formative Questions Edit Modal -->
+    <div class="modal-overlay" id="formativeQuestionsEditModal">
+        <div class="modal-container modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Formative Assessment Questions</h3>
+                <button class="modal-close" onclick="closeModal('formativeQuestionsEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="questions-modal-container">
+                    <div class="questions-tab-container" id="formativeQuestionsTabContainer">
+                        <!-- Tabs will be added here -->
+                    </div>
+                    <div class="questions-content-container" id="formativeQuestionsContentContainer">
+                        <!-- Content will be added here -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('formativeQuestionsEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveFormativeQuestionsBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Individual Formative Question Edit Modal -->
+    <div class="modal-overlay" id="formativeQuestionEditModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Question</h3>
+                <button class="modal-close" onclick="closeModal('formativeQuestionEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editQuestionLoNumber">
+                <input type="hidden" id="editQuestionIndex">
+                
+                <div class="form-group">
+                    <label class="form-label" for="editQuestionText">Question Text:</label>
+                    <textarea id="editQuestionText" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editQuestionType">Question Type:</label>
+                    <select id="editQuestionType" class="form-control">
+                        <option value="multiple-choice">Multiple Choice</option>
+                        <option value="short-answer">Short Answer</option>
+                        <option value="extended-response">Extended Response</option>
+                        <option value="calculation">Calculation</option>
+                        <option value="practical">Practical Data Analysis</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editQuestionMarks">Marks Available:</label>
+                    <input type="text" id="editQuestionMarks" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editQuestionAnswer">Model Answer:</label>
+                    <textarea id="editQuestionAnswer" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Marking Guidelines:</label>
+                    <div id="markingGuidelinesContainer">
+                        <!-- Marking guidelines will be added here -->
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="addMarkingGuidelineField()" style="margin-top: 0.5rem;">+ Add Marking Guideline</button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Common Errors:</label>
+                    <div id="commonErrorsContainer">
+                        <!-- Common errors will be added here -->
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="addCommonErrorField()" style="margin-top: 0.5rem;">+ Add Common Error</button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editQuestionMisconception">Targeted Misconception (Optional):</label>
+                    <input type="text" id="editQuestionMisconception" class="form-control" placeholder="Which misconception does this question address?">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('formativeQuestionEditModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveFormativeQuestion()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+	
+	<!-- Step 4 Modals -->
+    <!-- Definitions Edit Modal -->
+    <div class="modal-overlay" id="definitionsEditModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Definitions</h3>
+                <button class="modal-close" onclick="closeModal('definitionsEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="definitionsEditList">
+                    <!-- Definition fields will be added here -->
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="addDefinitionField()" style="margin-top: 0.5rem;">+ Add Definition</button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('definitionsEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveDefinitionsBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulas Edit Modal -->
+    <div class="modal-overlay" id="formulasEditModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Formulas</h3>
+                <button class="modal-close" onclick="closeModal('formulasEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="formulasEditList">
+                    <!-- Formula fields will be added here -->
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="addFormulaField()" style="margin-top: 0.5rem;">+ Add Formula</button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('formulasEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveFormulasBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Diagrams Edit Modal -->
+    <div class="modal-overlay" id="diagramsEditModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Diagrams</h3>
+                <button class="modal-close" onclick="closeModal('diagramsEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="diagramsEditList">
+                    <!-- Diagram fields will be added here -->
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="addDiagramField()" style="margin-top: 0.5rem;">+ Add Diagram</button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('diagramsEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveDiagramsBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Examples Edit Modal -->
+    <div class="modal-overlay" id="examplesEditModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Examples</h3>
+                <button class="modal-close" onclick="closeModal('examplesEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="examplesEditList">
+                    <!-- Example fields will be added here -->
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="addExampleField()" style="margin-top: 0.5rem;">+ Add Example</button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('examplesEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveExamplesBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Retrieval Worksheet Questions Edit Modal -->
+    <div class="modal-overlay" id="retrievalWorksheetQuestionsEditModal">
+        <div class="modal-container modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Retrieval Questions</h3>
+                <button class="modal-close" onclick="closeModal('retrievalWorksheetQuestionsEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="retrievalWorksheetQuestionsEditList">
+                    <!-- Retrieval question fields will be added here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('retrievalWorksheetQuestionsEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveRetrievalWorksheetQuestionsBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scale Questions Edit Modal -->
+    <div class="modal-overlay" id="scaleQuestionsEditModal">
+        <div class="modal-container modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit SCALE Questions</h3>
+                <button class="modal-close" onclick="closeModal('scaleQuestionsEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="scaleQuestionsEditList">
+                    <!-- SCALE question fields will be added here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('scaleQuestionsEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveScaleQuestionsBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Questions Edit Modal -->
+    <div class="modal-overlay" id="applicationQuestionsEditModal">
+        <div class="modal-container modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Application Questions</h3>
+                <button class="modal-close" onclick="closeModal('applicationQuestionsEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="applicationQuestionsEditList">
+                    <!-- Application question fields will be added here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('applicationQuestionsEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveApplicationQuestionsBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exam Technique Questions Edit Modal -->
+    <div class="modal-overlay" id="examTechniqueQuestionsEditModal">
+        <div class="modal-container modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Exam Technique Questions</h3>
+                <button class="modal-close" onclick="closeModal('examTechniqueQuestionsEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="examTechniqueQuestionsEditList">
+                    <!-- Exam technique question fields will be added here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('examTechniqueQuestionsEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveExamTechniqueQuestionsBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exam Style Questions Edit Modal -->
+    <div class="modal-overlay" id="examStyleQuestionsEditModal">
+        <div class="modal-container modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Exam Style Questions</h3>
+                <button class="modal-close" onclick="closeModal('examStyleQuestionsEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="examStyleQuestionsEditList">
+                    <!-- Exam style question fields will be added here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('examStyleQuestionsEditModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveExamStyleQuestionsBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+	
+    <!-- JavaScript Files -->
+    <script src="js/constants.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/step1.js"></script>
+    <script src="js/step2.js"></script>
+	<script src="js/step3.js"></script>
+	<script src="js/step4.js"></script>
+	<script src="js/export.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
