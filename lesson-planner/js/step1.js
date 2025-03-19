@@ -96,29 +96,74 @@ function handleOverviewResponse(e) {
 // Extract learning objectives from XML
 function extractLearningObjectives(xml) {
     // Extract LO1
-    const lo1Match = xml.match(/<LO1>[\s\S]*?<Title>([\s\S]*?)<\/Title>[\s\S]*?<Description>([\s\S]*?)<\/Description>[\s\S]*?<\/LO1>/);
+    const lo1Match = xml.match(/<LO1>[\s\S]*?<Title>([\s\S]*?)<\/Title>[\s\S]*?<Description>([\s\S]*?)<\/Description>([\s\S]*?)<\/LO1>/);
     if (lo1Match) {
         appState.learningObjectives.lo1.title = lo1Match[1].trim();
         appState.learningObjectives.lo1.description = lo1Match[2].trim();
+        
+        // Check for practical tag
+        const practical1Match = lo1Match[3].match(/<Practical>([\s\S]*?)<\/Practical>/i);
+        if (practical1Match) {
+            appState.learningObjectives.lo1.hasPractical = practical1Match[1].trim().toLowerCase() === 'yes';
+            // Update the checkbox to match
+            const checkbox = document.getElementById('lo1HasPractical');
+            if (checkbox) {
+                checkbox.checked = appState.learningObjectives.lo1.hasPractical;
+            }
+            // Update the badge
+            updateBadge('lo1Badge', appState.learningObjectives.lo1.hasPractical);
+        }
+        
         appState.learningObjectives.count = 1;
     }
     
     // Extract LO2
-    const lo2Match = xml.match(/<LO2>[\s\S]*?<Title>([\s\S]*?)<\/Title>[\s\S]*?<Description>([\s\S]*?)<\/Description>[\s\S]*?<\/LO2>/);
+    const lo2Match = xml.match(/<LO2>[\s\S]*?<Title>([\s\S]*?)<\/Title>[\s\S]*?<Description>([\s\S]*?)<\/Description>([\s\S]*?)<\/LO2>/);
     if (lo2Match) {
         appState.learningObjectives.lo2.title = lo2Match[1].trim();
         appState.learningObjectives.lo2.description = lo2Match[2].trim();
+        
+        // Check for practical tag
+        const practical2Match = lo2Match[3].match(/<Practical>([\s\S]*?)<\/Practical>/i);
+        if (practical2Match) {
+            appState.learningObjectives.lo2.hasPractical = practical2Match[1].trim().toLowerCase() === 'yes';
+            // Update the checkbox to match
+            const checkbox = document.getElementById('lo2HasPractical');
+            if (checkbox) {
+                checkbox.checked = appState.learningObjectives.lo2.hasPractical;
+            }
+            // Update the badge
+            updateBadge('lo2Badge', appState.learningObjectives.lo2.hasPractical);
+        }
+        
         appState.learningObjectives.count = 2;
     }
     
     // Extract LO3 if present
-    const lo3Match = xml.match(/<LO3>[\s\S]*?<Title>([\s\S]*?)<\/Title>[\s\S]*?<Description>([\s\S]*?)<\/Description>[\s\S]*?<\/LO3>/);
+    const lo3Match = xml.match(/<LO3>[\s\S]*?<Title>([\s\S]*?)<\/Title>[\s\S]*?<Description>([\s\S]*?)<\/Description>([\s\S]*?)<\/LO3>/);
     if (lo3Match) {
         appState.learningObjectives.lo3.title = lo3Match[1].trim();
         appState.learningObjectives.lo3.description = lo3Match[2].trim();
+        
+        // Check for practical tag
+        const practical3Match = lo3Match[3].match(/<Practical>([\s\S]*?)<\/Practical>/i);
+        if (practical3Match) {
+            appState.learningObjectives.lo3.hasPractical = practical3Match[1].trim().toLowerCase() === 'yes';
+            // Update the checkbox to match
+            const checkbox = document.getElementById('lo3HasPractical');
+            if (checkbox) {
+                checkbox.checked = appState.learningObjectives.lo3.hasPractical;
+            }
+            // Update the badge
+            updateBadge('lo3Badge', appState.learningObjectives.lo3.hasPractical);
+        }
+        
         appState.learningObjectives.lo3.exists = true;
         appState.learningObjectives.count = 3;
     }
+    
+    // Log the extracted learning objectives for debugging
+    console.log('Extracted learning objectives:', appState.learningObjectives);
 }
 
 // Preview overview response

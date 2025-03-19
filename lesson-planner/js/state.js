@@ -254,7 +254,7 @@ window.appState = {
         examTechniques: '',
         lessonStructure: '',
         practicalRequirements: '',
-        frayerModels: ''
+        frayerModels: '',
 		
 		// Step 3: Slide Generation
         retrieval: '',
@@ -398,7 +398,7 @@ window.appState = {
         examTechniques: '',
         lessonStructure: '',
         practicalRequirements: '',
-        frayerModels: ''
+        frayerModels: '',
 		
 		// Step 3: Slide Generation
         retrievalQuestions: '',

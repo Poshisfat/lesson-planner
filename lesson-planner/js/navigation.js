@@ -305,6 +305,8 @@ function finishStep2() {
     
     // Scroll to Step 3
     document.getElementById('mainStep3').scrollIntoView({ behavior: 'smooth' });
+}
+
 // Prepare Retrieval Practice Substep
 function prepareRetrievalPracticeSubstep() {
     initializeStep3A();
@@ -843,7 +845,7 @@ function updatePackageSummary() {
 }
 	
 	// Set up the substep navigation and content for Step 4
-    const step4Content = document.getElementById('mainStepContent4');
+    step4Content = document.getElementById('mainStepContent4');
     
     step4Content.innerHTML = `
     <div class="main-step-inner">
