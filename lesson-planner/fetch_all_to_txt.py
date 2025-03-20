@@ -1,19 +1,12 @@
 import requests
 import os
-from dotenv import load_dotenv
-import base64
 
-# Load .env file (for GitHub Token security)
-load_dotenv()
-
-# GitHub API Credentials
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+# GitHub API Info (No Authentication Needed)
 REPO_OWNER = "Poshisfat"  # Change this to your GitHub username
 REPO_NAME = "lesson-planner"  # Change this to your GitHub repo name
 
 # GitHub API URL to list all files
 url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents"
-headers = {"Authorization": f"token {GITHUB_TOKEN}"}
 
 # Output file to store all files in one place
 output_file = "github_files.txt"
@@ -23,8 +16,8 @@ def fetch_all_files(url, file_list=None):
     if file_list is None:
         file_list = []
 
-    response = requests.get(url, headers=headers)
-    
+    response = requests.get(url)  # No authentication needed
+
     if response.status_code == 200:
         files = response.json()
         

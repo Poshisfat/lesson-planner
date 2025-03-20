@@ -154,6 +154,74 @@
         // Run initialization
         window.checkSubstepNavScroll();
         
+		// Fix for summary display functions
+		// Wait until all scripts have fully loaded
+		setTimeout(function() {
+			console.log("Adding summary function enhancements");
+			
+			// Make sure summary functions are globally available
+			if (typeof displayLOTypesSubstepSummary === 'function') {
+				window.displayLOTypesSubstepSummary = displayLOTypesSubstepSummary;
+			}
+			if (typeof displayMisconceptionsSubstepSummary === 'function') {
+				window.displayMisconceptionsSubstepSummary = displayMisconceptionsSubstepSummary;
+			}
+			if (typeof displayPriorKnowledgeSubstepSummary === 'function') {
+				window.displayPriorKnowledgeSubstepSummary = displayPriorKnowledgeSubstepSummary;
+			}
+			if (typeof updateStep1Review === 'function') {
+				window.updateStep1Review = updateStep1Review;
+			}
+			
+			// Enhanced switchSubstep function to ensure summaries are updated
+			const originalSwitchSubstep = window.switchSubstep;
+			window.switchSubstep = function(mainStep, subStep) {
+				console.log("Enhanced switchSubstep:", mainStep, subStep);
+				
+				// Call the original function
+				if (originalSwitchSubstep) {
+					originalSwitchSubstep(mainStep, subStep);
+				}
+				
+				// Add our additional logic to update summaries
+				setTimeout(function() {
+					if (mainStep === 1) {
+						if (subStep === 'B' && window.displayLOTypesSubstepSummary) {
+							console.log("Calling displayLOTypesSubstepSummary");
+							window.displayLOTypesSubstepSummary();
+						} else if (subStep === 'C' && window.displayMisconceptionsSubstepSummary) {
+							console.log("Calling displayMisconceptionsSubstepSummary");
+							window.displayMisconceptionsSubstepSummary();
+						} else if (subStep === 'D' && window.displayPriorKnowledgeSubstepSummary) {
+							console.log("Calling displayPriorKnowledgeSubstepSummary");
+							window.displayPriorKnowledgeSubstepSummary();
+						} else if (subStep === 'E' && window.updateStep1Review) {
+							console.log("Calling updateStep1Review");
+							window.updateStep1Review();
+						}
+					}
+				}, 300); // Small delay to ensure DOM is updated
+			};
+			
+			// Reattach event listeners for substep tabs with the enhanced functionality
+			document.querySelectorAll('.substep-tab').forEach(tab => {
+				const stepNumber = parseInt(tab.getAttribute('data-step'));
+				const substepLetter = tab.getAttribute('data-substep');
+				
+				// Remove existing click handlers
+				tab.removeEventListener('click', function() {
+					window.switchSubstep(stepNumber, substepLetter);
+				});
+				
+				// Add new click handler
+				tab.addEventListener('click', function() {
+					window.switchSubstep(stepNumber, substepLetter);
+				});
+			});
+			
+			console.log("Summary function enhancements completed");
+		}, 1000); // Wait for 1 second to ensure everything is loaded
+		
         console.log('Fix script completed');
     });
 })();

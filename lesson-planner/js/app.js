@@ -56,14 +56,7 @@ function initApp() {
                 frayerModels: '',
                 retrieval: '',
                 teachingInput: '',
-                formative: '',
-                referenceMaterials: '',
-                retrievalWorksheet: '',
-                scaleQuestions: '',
-                applicationQuestions: '',
-                examTechniqueQuestions: '',
-                examStyleQuestions: '',
-                worksheetFinalization: ''
+                formative: ''
             },
             learningObjectives: {
                 lo1: { title: '', description: '', hasPractical: false },
@@ -71,32 +64,64 @@ function initApp() {
                 lo3: { title: '', description: '', hasPractical: false, exists: false },
                 count: 0
             },
+            loTypes: {
+                lo1: { aoCategory: '', specificType: '', justification: '' },
+                lo2: { aoCategory: '', specificType: '', justification: '' },
+                lo3: { aoCategory: '', specificType: '', justification: '' }
+            },
+            misconceptions: {
+                lo1: [],
+                lo2: [],
+                lo3: []
+            },
+            priorKnowledge: {
+                lo1: [],
+                lo2: [],
+                lo3: []
+            },
+            editState: {
+                currentLO: 1,
+                tempMisconceptions: [],
+                tempPriorKnowledge: []
+            },
             responseTags: {}
         };
+    } else {
+        // Ensure critical nested objects exist
+        if (!appState.loTypes) {
+            console.log('Initializing loTypes object');
+            appState.loTypes = {
+                lo1: { aoCategory: '', specificType: '', justification: '' },
+                lo2: { aoCategory: '', specificType: '', justification: '' },
+                lo3: { aoCategory: '', specificType: '', justification: '' }
+            };
+        }
+        
+        if (!appState.misconceptions) {
+            console.log('Initializing misconceptions object');
+            appState.misconceptions = { lo1: [], lo2: [], lo3: [] };
+        }
+        
+        if (!appState.priorKnowledge) {
+            console.log('Initializing priorKnowledge object');
+            appState.priorKnowledge = { lo1: [], lo2: [], lo3: [] };
+        }
+        
+        if (!appState.editState) {
+            console.log('Initializing editState object');
+            appState.editState = {
+                currentLO: 1,
+                tempMisconceptions: [],
+                tempPriorKnowledge: []
+            };
+        }
     }
     
-    console.log('Initializing app...');
-    
-    // Ensure appState is available
-    if (!window.appState) {
-        console.error('appState is not defined');
-        window.appState = {
-            currentMainStep: 1,
-            currentSubStep: 'A',
-            mainStepExpanded: [true, false, false, false],
-            lessonInfo: {}
-        };
-    }
-    
+    // Keep whatever code comes after the initialization
+    // For example:
     setupEventListeners();
     updateStepIndicators();
-    setupResponseTabs();
-    updateButtonStates();
-    
-    // Initialize scroll indicators for substep navigation
-    checkSubstepNavScroll();
-    
-    console.log('App initialization complete');
+    // etc.
 }
 
 // Toggle BLT levels visibility
@@ -586,6 +611,11 @@ window.initApp = function() {
         };
     }
     
+    // Ensure misconceptions object is defined
+    if (!window.appState.misconceptions) {
+        window.appState.misconceptions = { lo1: [], lo2: [], lo3: [] };
+    }
+    
     setupEventListeners();
     updateStepIndicators();
     setupResponseTabs();
@@ -596,24 +626,24 @@ window.initApp = function() {
     
     console.log('App initialization complete');
 	
-window.toggleMainStep = function(stepNumber) {
-    try {
-        console.log('Toggling main step', stepNumber);
-        const mainStep = document.getElementById(`mainStep${stepNumber}`);
-        const mainStepContent = document.getElementById(`mainStepContent${stepNumber}`);
-        
-        if (!mainStep || !mainStepContent) {
-            console.error(`Could not find main step ${stepNumber} elements`);
-            return;
+    window.toggleMainStep = function(stepNumber) {
+        try {
+            console.log('Toggling main step', stepNumber);
+            const mainStep = document.getElementById(`mainStep${stepNumber}`);
+            const mainStepContent = document.getElementById(`mainStepContent${stepNumber}`);
+            
+            if (!mainStep || !mainStepContent) {
+                console.error(`Could not find main step ${stepNumber} elements`);
+                return;
+            }
+            
+            // Rest of function remains the same
+        } catch (error) {
+            console.error('Error in toggleMainStep:', error);
         }
-        
-        // Rest of function remains the same
-    } catch (error) {
-        console.error('Error in toggleMainStep:', error);
-    }
+    };
 };
-
-};document.addEventListener('DOMContentLoaded', initApp);
+document.addEventListener('DOMContentLoaded', initApp);
 
 // Make navigation functions globally available
 window.addEventListener('load', function() {
@@ -1003,41 +1033,63 @@ function updateBadge(badgeId, hasPractical) {
 
 // Display the content summary for LO Types substep
 function displayLOTypesSubstepSummary() {
+    console.log("Displaying LO Types Substep Summary");
+    console.log("Current learning objectives:", appState.learningObjectives);
+    
     let html = '<h4>Learning Objectives</h4>';
     
-    // LO1
-    html += `<div class="lo-container">
-        <div class="lo-header">
-            <span>Learning Objective 1</span>
-            <span id="summaryLo1Badge" class="lo-badge ${appState.learningObjectives.lo1.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo1.hasPractical ? 'Practical' : 'Theory'}</span>
-        </div>
-        <p><strong>${appState.learningObjectives.lo1.title}</strong></p>
-        <p>${appState.learningObjectives.lo1.description}</p>
-    </div>`;
-    
-    // LO2
-    html += `<div class="lo-container">
-        <div class="lo-header">
-            <span>Learning Objective 2</span>
-            <span id="summaryLo2Badge" class="lo-badge ${appState.learningObjectives.lo2.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo2.hasPractical ? 'Practical' : 'Theory'}</span>
-        </div>
-        <p><strong>${appState.learningObjectives.lo2.title}</strong></p>
-        <p>${appState.learningObjectives.lo2.description}</p>
-    </div>`;
-    
-    // LO3 if it exists
-    if (appState.learningObjectives.lo3.exists) {
+    // Check if learning objectives exist and have titles
+    if (appState.learningObjectives && 
+        appState.learningObjectives.lo1 && 
+        appState.learningObjectives.lo1.title) {
+        
+        // LO1
         html += `<div class="lo-container">
             <div class="lo-header">
-                <span>Learning Objective 3</span>
-                <span id="summaryLo3Badge" class="lo-badge ${appState.learningObjectives.lo3.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo3.hasPractical ? 'Practical' : 'Theory'}</span>
+                <span>Learning Objective 1</span>
+                <span id="summaryLo1Badge" class="lo-badge ${appState.learningObjectives.lo1.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo1.hasPractical ? 'Practical' : 'Theory'}</span>
             </div>
-            <p><strong>${appState.learningObjectives.lo3.title}</strong></p>
-            <p>${appState.learningObjectives.lo3.description}</p>
+            <p><strong>${appState.learningObjectives.lo1.title}</strong></p>
+            <p>${appState.learningObjectives.lo1.description}</p>
         </div>`;
+        
+        // LO2
+        if (appState.learningObjectives.lo2 && appState.learningObjectives.lo2.title) {
+            html += `<div class="lo-container">
+                <div class="lo-header">
+                    <span>Learning Objective 2</span>
+                    <span id="summaryLo2Badge" class="lo-badge ${appState.learningObjectives.lo2.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo2.hasPractical ? 'Practical' : 'Theory'}</span>
+                </div>
+                <p><strong>${appState.learningObjectives.lo2.title}</strong></p>
+                <p>${appState.learningObjectives.lo2.description}</p>
+            </div>`;
+        }
+        
+        // LO3 if it exists
+        if (appState.learningObjectives.lo3 && 
+            appState.learningObjectives.lo3.exists && 
+            appState.learningObjectives.lo3.title) {
+            
+            html += `<div class="lo-container">
+                <div class="lo-header">
+                    <span>Learning Objective 3</span>
+                    <span id="summaryLo3Badge" class="lo-badge ${appState.learningObjectives.lo3.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo3.hasPractical ? 'Practical' : 'Theory'}</span>
+                </div>
+                <p><strong>${appState.learningObjectives.lo3.title}</strong></p>
+                <p>${appState.learningObjectives.lo3.description}</p>
+            </div>`;
+        }
+    } else {
+        html = '<p>Please complete Step 1A first to see your learning objectives here.</p>';
     }
     
-    document.getElementById('loBSummaryContent').innerHTML = html;
+    // Update the content
+    const contentElement = document.getElementById('loBSummaryContent');
+    if (contentElement) {
+        contentElement.innerHTML = html;
+    } else {
+        console.error("Could not find loBSummaryContent element");
+    }
 }
 
 // Generate LO types prompt
@@ -1119,47 +1171,129 @@ IMPORTANT: I need your response in two parts:
 
 // Handle LO types response
 function handleLOTypesResponse(e) {
-    const response = e.target.value;
-    appState.responses.loTypes = response;
-    
-    // Extract XML content
-    const loTypesMatch = extractXML(response, 'LOTypes');
-    
-    if (loTypesMatch) {
-        appState.responseTags.loTypes = loTypesMatch;
+    try {
+        const response = e.target.value;
         
-        // Extract LO types
-        extractLOTypes(loTypesMatch);
+        // Only proceed if there's actual content
+        if (!response || response.trim() === '') {
+            console.log('Empty response, not processing');
+            document.getElementById('continueToMisconceptionsBtn').disabled = true;
+            return;
+        }
+        
+        console.log('Processing LOTypes response...');
+        appState.responses.loTypes = response;
+        
+        // Ensure loTypes object is initialized
+        if (!appState.loTypes) {
+            console.log('Initializing loTypes object');
+            appState.loTypes = {
+                lo1: {
+                    aoCategory: '',
+                    specificType: '',
+                    justification: ''
+                },
+                lo2: {
+                    aoCategory: '',
+                    specificType: '',
+                    justification: ''
+                },
+                lo3: {
+                    aoCategory: '',
+                    specificType: '',
+                    justification: ''
+                }
+            };
+        }
+        
+        // Extract XML content - specifically looking for LOTypes, not LearningObjectives
+        const loTypesMatch = extractXML(response, 'LOTypes');
+        
+        if (loTypesMatch) {
+            console.log('Found LOTypes XML in response');
+            appState.responseTags.loTypes = loTypesMatch;
+            
+            // Extract LO types
+            try {
+                extractLOTypes(loTypesMatch);
+                console.log('Successfully extracted LO types:', appState.loTypes);
+                
+                // Enable the continue button
+                document.getElementById('continueToMisconceptionsBtn').disabled = false;
+            } catch (extractError) {
+                console.error('Error extracting LO types:', extractError);
+                alert('There was an error processing the Learning Objective Types. Please check the format of Claude\'s response.');
+                document.getElementById('continueToMisconceptionsBtn').disabled = true;
+            }
+        } else {
+            console.warn('No LOTypes XML found in the response');
+            
+            // Check if response contains Learning Objectives instead
+            if (response.includes('<LearningObjectives>')) {
+                console.warn('Response contains Learning Objectives XML, not LOTypes. This appears to be from Step 1A, not Step 1B.');
+                alert('This response appears to be from Step 1A (Learning Objectives), not Step 1B (LO Types). Please generate and paste the LOTypes response from Claude.');
+            }
+            
+            document.getElementById('continueToMisconceptionsBtn').disabled = true;
+        }
+    } catch (error) {
+        console.error('Error in handleLOTypesResponse:', error);
+        document.getElementById('continueToMisconceptionsBtn').disabled = true;
     }
-    
-    // Update button state
-    document.getElementById('continueToMisconceptionsBtn').disabled = !loTypesMatch;
 }
 
 // Extract LO types from XML
 function extractLOTypes(xml) {
-    // Extract LO1 type
-    const lo1TypeMatch = xml.match(/<LO1Type>[\s\S]*?<AOCategory>([\s\S]*?)<\/AOCategory>[\s\S]*?<SpecificType>([\s\S]*?)<\/SpecificType>[\s\S]*?<Justification>([\s\S]*?)<\/Justification>[\s\S]*?<\/LO1Type>/);
-    if (lo1TypeMatch) {
-        appState.loTypes.lo1.aoCategory = lo1TypeMatch[1].trim();
-        appState.loTypes.lo1.specificType = lo1TypeMatch[2].trim();
-        appState.loTypes.lo1.justification = lo1TypeMatch[3].trim();
+    if (!xml) {
+        console.error('No XML provided to extractLOTypes');
+        return;
     }
     
-    // Extract LO2 type
-    const lo2TypeMatch = xml.match(/<LO2Type>[\s\S]*?<AOCategory>([\s\S]*?)<\/AOCategory>[\s\S]*?<SpecificType>([\s\S]*?)<\/SpecificType>[\s\S]*?<Justification>([\s\S]*?)<\/Justification>[\s\S]*?<\/LO2Type>/);
-    if (lo2TypeMatch) {
-        appState.loTypes.lo2.aoCategory = lo2TypeMatch[1].trim();
-        appState.loTypes.lo2.specificType = lo2TypeMatch[2].trim();
-        appState.loTypes.lo2.justification = lo2TypeMatch[3].trim();
+    // Ensure loTypes object exists
+    if (!appState.loTypes) {
+        appState.loTypes = {
+            lo1: { aoCategory: '', specificType: '', justification: '' },
+            lo2: { aoCategory: '', specificType: '', justification: '' },
+            lo3: { aoCategory: '', specificType: '', justification: '' }
+        };
     }
     
-    // Extract LO3 type if present
-    const lo3TypeMatch = xml.match(/<LO3Type>[\s\S]*?<AOCategory>([\s\S]*?)<\/AOCategory>[\s\S]*?<SpecificType>([\s\S]*?)<\/SpecificType>[\s\S]*?<Justification>([\s\S]*?)<\/Justification>[\s\S]*?<\/LO3Type>/);
-    if (lo3TypeMatch && appState.learningObjectives.lo3.exists) {
-        appState.loTypes.lo3.aoCategory = lo3TypeMatch[1].trim();
-        appState.loTypes.lo3.specificType = lo3TypeMatch[2].trim();
-        appState.loTypes.lo3.justification = lo3TypeMatch[3].trim();
+    try {
+        // Extract LO1 type
+        const lo1TypeMatch = xml.match(/<LO1Type>[\s\S]*?<AOCategory>([\s\S]*?)<\/AOCategory>[\s\S]*?<SpecificType>([\s\S]*?)<\/SpecificType>[\s\S]*?<Justification>([\s\S]*?)<\/Justification>[\s\S]*?<\/LO1Type>/);
+        if (lo1TypeMatch) {
+            appState.loTypes.lo1.aoCategory = lo1TypeMatch[1].trim();
+            appState.loTypes.lo1.specificType = lo1TypeMatch[2].trim();
+            appState.loTypes.lo1.justification = lo1TypeMatch[3].trim();
+            console.log('Extracted LO1 type:', appState.loTypes.lo1);
+        } else {
+            console.warn('Could not extract LO1 type from XML');
+        }
+        
+        // Extract LO2 type
+        const lo2TypeMatch = xml.match(/<LO2Type>[\s\S]*?<AOCategory>([\s\S]*?)<\/AOCategory>[\s\S]*?<SpecificType>([\s\S]*?)<\/SpecificType>[\s\S]*?<Justification>([\s\S]*?)<\/Justification>[\s\S]*?<\/LO2Type>/);
+        if (lo2TypeMatch) {
+            appState.loTypes.lo2.aoCategory = lo2TypeMatch[1].trim();
+            appState.loTypes.lo2.specificType = lo2TypeMatch[2].trim();
+            appState.loTypes.lo2.justification = lo2TypeMatch[3].trim();
+            console.log('Extracted LO2 type:', appState.loTypes.lo2);
+        } else {
+            console.warn('Could not extract LO2 type from XML');
+        }
+        
+        // Extract LO3 type if present
+        const lo3TypeMatch = xml.match(/<LO3Type>[\s\S]*?<AOCategory>([\s\S]*?)<\/AOCategory>[\s\S]*?<SpecificType>([\s\S]*?)<\/SpecificType>[\s\S]*?<Justification>([\s\S]*?)<\/Justification>[\s\S]*?<\/LO3Type>/);
+        if (lo3TypeMatch && appState.learningObjectives.lo3.exists) {
+            appState.loTypes.lo3.aoCategory = lo3TypeMatch[1].trim();
+            appState.loTypes.lo3.specificType = lo3TypeMatch[2].trim();
+            appState.loTypes.lo3.justification = lo3TypeMatch[3].trim();
+            console.log('Extracted LO3 type:', appState.loTypes.lo3);
+        } else if (appState.learningObjectives.lo3.exists) {
+            console.warn('Could not extract LO3 type from XML even though LO3 exists');
+        }
+    } catch (error) {
+        console.error('Error in extractLOTypes:', error);
+        throw error; // Re-throw to be handled by the caller
     }
 }
 
@@ -1187,28 +1321,60 @@ function previewLOTypesResponse() {
 
 // Display LO types for editing
 function displayLOTypesForEditing() {
-    // LO1
-    document.getElementById('lo1AOCategory').textContent = appState.loTypes.lo1.aoCategory;
-    document.getElementById('lo1SpecificType').textContent = appState.loTypes.lo1.specificType;
-    document.getElementById('lo1TypeJustification').textContent = appState.loTypes.lo1.justification;
-    
-    // LO2
-    document.getElementById('lo2AOCategory').textContent = appState.loTypes.lo2.aoCategory;
-    document.getElementById('lo2SpecificType').textContent = appState.loTypes.lo2.specificType;
-    document.getElementById('lo2TypeJustification').textContent = appState.loTypes.lo2.justification;
-    
-    // LO3 if it exists
-    if (appState.learningObjectives.lo3.exists) {
-        document.getElementById('lo3TypeContainer').style.display = 'block';
-        document.getElementById('lo3AOCategory').textContent = appState.loTypes.lo3.aoCategory;
-        document.getElementById('lo3SpecificType').textContent = appState.loTypes.lo3.specificType;
-        document.getElementById('lo3TypeJustification').textContent = appState.loTypes.lo3.justification;
-    } else {
-        document.getElementById('lo3TypeContainer').style.display = 'none';
+    try {
+        // Ensure loTypes exists
+        if (!appState.loTypes) {
+            console.error('loTypes not initialized in displayLOTypesForEditing');
+            appState.loTypes = {
+                lo1: { aoCategory: '', specificType: '', justification: '' },
+                lo2: { aoCategory: '', specificType: '', justification: '' },
+                lo3: { aoCategory: '', specificType: '', justification: '' }
+            };
+        }
+        
+        // LO1
+        const lo1AOCategory = document.getElementById('lo1AOCategory');
+        const lo1SpecificType = document.getElementById('lo1SpecificType');
+        const lo1TypeJustification = document.getElementById('lo1TypeJustification');
+        
+        if (lo1AOCategory) lo1AOCategory.textContent = appState.loTypes.lo1.aoCategory || '(Not set)';
+        if (lo1SpecificType) lo1SpecificType.textContent = appState.loTypes.lo1.specificType || '(Not set)';
+        if (lo1TypeJustification) lo1TypeJustification.textContent = appState.loTypes.lo1.justification || '(Not provided)';
+        
+        // LO2
+        const lo2AOCategory = document.getElementById('lo2AOCategory');
+        const lo2SpecificType = document.getElementById('lo2SpecificType');
+        const lo2TypeJustification = document.getElementById('lo2TypeJustification');
+        
+        if (lo2AOCategory) lo2AOCategory.textContent = appState.loTypes.lo2.aoCategory || '(Not set)';
+        if (lo2SpecificType) lo2SpecificType.textContent = appState.loTypes.lo2.specificType || '(Not set)';
+        if (lo2TypeJustification) lo2TypeJustification.textContent = appState.loTypes.lo2.justification || '(Not provided)';
+        
+        // LO3 if it exists
+        if (appState.learningObjectives.lo3.exists) {
+            const lo3TypeContainer = document.getElementById('lo3TypeContainer');
+            const lo3AOCategory = document.getElementById('lo3AOCategory');
+            const lo3SpecificType = document.getElementById('lo3SpecificType');
+            const lo3TypeJustification = document.getElementById('lo3TypeJustification');
+            
+            if (lo3TypeContainer) lo3TypeContainer.style.display = 'block';
+            if (lo3AOCategory) lo3AOCategory.textContent = appState.loTypes.lo3.aoCategory || '(Not set)';
+            if (lo3SpecificType) lo3SpecificType.textContent = appState.loTypes.lo3.specificType || '(Not set)';
+            if (lo3TypeJustification) lo3TypeJustification.textContent = appState.loTypes.lo3.justification || '(Not provided)';
+        } else {
+            const lo3TypeContainer = document.getElementById('lo3TypeContainer');
+            if (lo3TypeContainer) lo3TypeContainer.style.display = 'none';
+        }
+        
+        // Show the container
+        const loTypesEditContainer = document.getElementById('loTypesEditContainer');
+        if (loTypesEditContainer) loTypesEditContainer.style.display = 'block';
+        
+        console.log('Successfully displayed LO types for editing');
+    } catch (error) {
+        console.error('Error in displayLOTypesForEditing:', error);
+        alert('There was an error displaying the Learning Objective Types. Please try refreshing the page.');
     }
-    
-    // Show the container
-    document.getElementById('loTypesEditContainer').style.display = 'block';
 }
 
 // Open LO Type Edit Modal
@@ -1275,50 +1441,81 @@ function saveLoTypeChanges() {
 
 // Display the content summary for Misconceptions substep
 function displayMisconceptionsSubstepSummary() {
+    console.log("Displaying Misconceptions Substep Summary");
+    console.log("Current LO types:", appState.loTypes);
+    
     let html = '<h4>Learning Objectives & Types</h4>';
     
-    // LO1
-    html += `<div class="lo-container">
-        <div class="lo-header">
-            <span>Learning Objective 1</span>
-            <span id="summaryLo1Badge" class="lo-badge ${appState.learningObjectives.lo1.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo1.hasPractical ? 'Practical' : 'Theory'}</span>
-        </div>
-        <p><strong>${appState.learningObjectives.lo1.title}</strong></p>
-        <p>${appState.learningObjectives.lo1.description}</p>
-        <div style="margin-top: 0.5rem;">
-            <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo1.aoCategory} - ${appState.loTypes.lo1.specificType}</p>
-        </div>
-    </div>`;
-    
-    // LO2
-    html += `<div class="lo-container">
-        <div class="lo-header">
-            <span>Learning Objective 2</span>
-            <span id="summaryLo2Badge" class="lo-badge ${appState.learningObjectives.lo2.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo2.hasPractical ? 'Practical' : 'Theory'}</span>
-        </div>
-        <p><strong>${appState.learningObjectives.lo2.title}</strong></p>
-        <p>${appState.learningObjectives.lo2.description}</p>
-        <div style="margin-top: 0.5rem;">
-            <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo2.aoCategory} - ${appState.loTypes.lo2.specificType}</p>
-        </div>
-    </div>`;
-    
-    // LO3 if it exists
-    if (appState.learningObjectives.lo3.exists) {
+    // Check if learning objectives and types exist
+    if (appState.learningObjectives && 
+        appState.learningObjectives.lo1 && 
+        appState.learningObjectives.lo1.title &&
+        appState.loTypes &&
+        appState.loTypes.lo1 &&
+        appState.loTypes.lo1.aoCategory) {
+        
+        // LO1
         html += `<div class="lo-container">
             <div class="lo-header">
-                <span>Learning Objective 3</span>
-                <span id="summaryLo3Badge" class="lo-badge ${appState.learningObjectives.lo3.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo3.hasPractical ? 'Practical' : 'Theory'}</span>
+                <span>Learning Objective 1</span>
+                <span id="summaryLo1Badge" class="lo-badge ${appState.learningObjectives.lo1.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo1.hasPractical ? 'Practical' : 'Theory'}</span>
             </div>
-            <p><strong>${appState.learningObjectives.lo3.title}</strong></p>
-            <p>${appState.learningObjectives.lo3.description}</p>
+            <p><strong>${appState.learningObjectives.lo1.title}</strong></p>
+            <p>${appState.learningObjectives.lo1.description}</p>
             <div style="margin-top: 0.5rem;">
-                <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo3.aoCategory} - ${appState.loTypes.lo3.specificType}</p>
+                <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo1.aoCategory} - ${appState.loTypes.lo1.specificType}</p>
             </div>
         </div>`;
+        
+        // LO2
+        if (appState.learningObjectives.lo2 && 
+            appState.learningObjectives.lo2.title &&
+            appState.loTypes.lo2 &&
+            appState.loTypes.lo2.aoCategory) {
+            
+            html += `<div class="lo-container">
+                <div class="lo-header">
+                    <span>Learning Objective 2</span>
+                    <span id="summaryLo2Badge" class="lo-badge ${appState.learningObjectives.lo2.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo2.hasPractical ? 'Practical' : 'Theory'}</span>
+                </div>
+                <p><strong>${appState.learningObjectives.lo2.title}</strong></p>
+                <p>${appState.learningObjectives.lo2.description}</p>
+                <div style="margin-top: 0.5rem;">
+                    <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo2.aoCategory} - ${appState.loTypes.lo2.specificType}</p>
+                </div>
+            </div>`;
+        }
+        
+        // LO3 if it exists
+        if (appState.learningObjectives.lo3 && 
+            appState.learningObjectives.lo3.exists && 
+            appState.learningObjectives.lo3.title &&
+            appState.loTypes.lo3 &&
+            appState.loTypes.lo3.aoCategory) {
+            
+            html += `<div class="lo-container">
+                <div class="lo-header">
+                    <span>Learning Objective 3</span>
+                    <span id="summaryLo3Badge" class="lo-badge ${appState.learningObjectives.lo3.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo3.hasPractical ? 'Practical' : 'Theory'}</span>
+                </div>
+                <p><strong>${appState.learningObjectives.lo3.title}</strong></p>
+                <p>${appState.learningObjectives.lo3.description}</p>
+                <div style="margin-top: 0.5rem;">
+                    <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo3.aoCategory} - ${appState.loTypes.lo3.specificType}</p>
+                </div>
+            </div>`;
+        }
+    } else {
+        html = '<p>Please complete Steps 1A and 1B first to see your learning objectives and types here.</p>';
     }
     
-    document.getElementById('loCSummaryContent').innerHTML = html;
+    // Update the content
+    const contentElement = document.getElementById('loCSummaryContent');
+    if (contentElement) {
+        contentElement.innerHTML = html;
+    } else {
+        console.error("Could not find loCSummaryContent element");
+    }
 }
 
 // Generate misconceptions prompt
@@ -1385,6 +1582,16 @@ function handleMisconceptionsResponse(e) {
     const response = e.target.value;
     appState.responses.misconceptions = response;
     
+    // Ensure misconceptions object exists
+    if (!appState.misconceptions) {
+        console.log('Initializing misconceptions object');
+        appState.misconceptions = {
+            lo1: [],
+            lo2: [],
+            lo3: []
+        };
+    }
+    
     // Extract XML content
     const misconceptionsMatch = extractXML(response, 'Misconceptions');
     
@@ -1401,6 +1608,16 @@ function handleMisconceptionsResponse(e) {
 
 // Extract misconceptions from XML
 function extractMisconceptions(xml) {
+    // Ensure misconceptions object exists
+    if (!appState.misconceptions) {
+        console.log('Initializing misconceptions object in extractMisconceptions');
+        appState.misconceptions = {
+            lo1: [],
+            lo2: [],
+            lo3: []
+        };
+    }
+    
     // Reset misconceptions arrays
     appState.misconceptions.lo1 = [];
     appState.misconceptions.lo2 = [];
@@ -1614,62 +1831,94 @@ function saveMisconceptionsChanges() {
 
 // Display the content summary for Prior Knowledge substep
 function displayPriorKnowledgeSubstepSummary() {
+    console.log("Displaying Prior Knowledge Substep Summary");
+    console.log("Current misconceptions:", appState.misconceptions);
+    
     let html = '<h4>Learning Objectives & Misconceptions</h4>';
     
-    // LO1
-    html += `<div class="lo-container">
-        <div class="lo-header">
-            <span>Learning Objective 1</span>
-            <span id="summaryLo1Badge" class="lo-badge ${appState.learningObjectives.lo1.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo1.hasPractical ? 'Practical' : 'Theory'}</span>
-        </div>
-        <p><strong>${appState.learningObjectives.lo1.title}</strong></p>
-        <p>${appState.learningObjectives.lo1.description}</p>
-        <div style="margin-top: 0.5rem;">
-            <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo1.aoCategory} - ${appState.loTypes.lo1.specificType}</p>
-            <p><strong>Misconceptions:</strong></p>
-            <ul>
-                ${appState.misconceptions.lo1.map(m => `<li>${m}</li>`).join('')}
-            </ul>
-        </div>
-    </div>`;
-    
-    // LO2
-    html += `<div class="lo-container">
-        <div class="lo-header">
-            <span>Learning Objective 2</span>
-            <span id="summaryLo2Badge" class="lo-badge ${appState.learningObjectives.lo2.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo2.hasPractical ? 'Practical' : 'Theory'}</span>
-        </div>
-        <p><strong>${appState.learningObjectives.lo2.title}</strong></p>
-        <p>${appState.learningObjectives.lo2.description}</p>
-        <div style="margin-top: 0.5rem;">
-            <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo2.aoCategory} - ${appState.loTypes.lo2.specificType}</p>
-            <p><strong>Misconceptions:</strong></p>
-            <ul>
-                ${appState.misconceptions.lo2.map(m => `<li>${m}</li>`).join('')}
-            </ul>
-        </div>
-    </div>`;
-    
-    // LO3 if it exists
-    if (appState.learningObjectives.lo3.exists) {
+    // Check if learning objectives and misconceptions exist
+    if (appState.learningObjectives && 
+        appState.learningObjectives.lo1 && 
+        appState.learningObjectives.lo1.title &&
+        appState.loTypes &&
+        appState.loTypes.lo1 &&
+        appState.misconceptions &&
+        appState.misconceptions.lo1) {
+        
+        // LO1
         html += `<div class="lo-container">
             <div class="lo-header">
-                <span>Learning Objective 3</span>
-                <span id="summaryLo3Badge" class="lo-badge ${appState.learningObjectives.lo3.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo3.hasPractical ? 'Practical' : 'Theory'}</span>
+                <span>Learning Objective 1</span>
+                <span id="summaryLo1Badge" class="lo-badge ${appState.learningObjectives.lo1.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo1.hasPractical ? 'Practical' : 'Theory'}</span>
             </div>
-            <p><strong>${appState.learningObjectives.lo3.title}</strong></p>
-            <p>${appState.learningObjectives.lo3.description}</p>
+            <p><strong>${appState.learningObjectives.lo1.title}</strong></p>
+            <p>${appState.learningObjectives.lo1.description}</p>
             <div style="margin-top: 0.5rem;">
-                <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo3.aoCategory} - ${appState.loTypes.lo3.specificType}</p>
+                <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo1.aoCategory} - ${appState.loTypes.lo1.specificType}</p>
                 <p><strong>Misconceptions:</strong></p>
                 <ul>
-                    ${appState.misconceptions.lo3.map(m => `<li>${m}</li>`).join('')}
+                    ${appState.misconceptions.lo1.map(m => `<li>${m}</li>`).join('')}
                 </ul>
             </div>
         </div>`;
+        
+        // LO2
+        if (appState.learningObjectives.lo2 && 
+            appState.learningObjectives.lo2.title &&
+            appState.loTypes.lo2 &&
+            appState.misconceptions.lo2) {
+            
+            html += `<div class="lo-container">
+                <div class="lo-header">
+                    <span>Learning Objective 2</span>
+                    <span id="summaryLo2Badge" class="lo-badge ${appState.learningObjectives.lo2.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo2.hasPractical ? 'Practical' : 'Theory'}</span>
+                </div>
+                <p><strong>${appState.learningObjectives.lo2.title}</strong></p>
+                <p>${appState.learningObjectives.lo2.description}</p>
+                <div style="margin-top: 0.5rem;">
+                    <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo2.aoCategory} - ${appState.loTypes.lo2.specificType}</p>
+                    <p><strong>Misconceptions:</strong></p>
+                    <ul>
+                        ${appState.misconceptions.lo2.map(m => `<li>${m}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>`;
+        }
+        
+        // LO3 if it exists
+        if (appState.learningObjectives.lo3 && 
+            appState.learningObjectives.lo3.exists && 
+            appState.learningObjectives.lo3.title &&
+            appState.loTypes.lo3 &&
+            appState.misconceptions.lo3) {
+            
+            html += `<div class="lo-container">
+                <div class="lo-header">
+                    <span>Learning Objective 3</span>
+                    <span id="summaryLo3Badge" class="lo-badge ${appState.learningObjectives.lo3.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo3.hasPractical ? 'Practical' : 'Theory'}</span>
+                </div>
+                <p><strong>${appState.learningObjectives.lo3.title}</strong></p>
+                <p>${appState.learningObjectives.lo3.description}</p>
+                <div style="margin-top: 0.5rem;">
+                    <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo3.aoCategory} - ${appState.loTypes.lo3.specificType}</p>
+                    <p><strong>Misconceptions:</strong></p>
+                    <ul>
+                        ${appState.misconceptions.lo3.map(m => `<li>${m}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>`;
+        }
+    } else {
+        html = '<p>Please complete Steps 1A, 1B, and 1C first to see your learning objectives, types, and misconceptions here.</p>';
     }
     
-    document.getElementById('loDSummaryContent').innerHTML = html;
+    // Update the content
+    const contentElement = document.getElementById('loDSummaryContent');
+    if (contentElement) {
+        contentElement.innerHTML = html;
+    } else {
+        console.error("Could not find loDSummaryContent element");
+    }
 }
 
 // Generate prior knowledge prompt
@@ -1741,6 +1990,15 @@ IMPORTANT: I need your response in two parts:
 function handlePriorKnowledgeResponse(e) {
     const response = e.target.value;
     appState.responses.priorKnowledge = response;
+	// Ensure priorKnowledge object exists
+	 if (!appState.priorKnowledge) {
+		 console.log('Initializing priorKnowledge object');
+		 appState.priorKnowledge = {
+			 lo1: [],
+			 lo2: [],
+			 lo3: []
+		 };
+	 }
     
     // Extract XML content
     const priorKnowledgeMatch = extractXML(response, 'PriorKnowledge');
@@ -1758,7 +2016,17 @@ function handlePriorKnowledgeResponse(e) {
 
 // Extract prior knowledge from XML
 function extractPriorKnowledge(xml) {
-    // Reset prior knowledge arrays
+    // Ensure priorKnowledge object exists
+	 if (!appState.priorKnowledge) {
+		 console.log('Initializing priorKnowledge object in extractPriorKnowledge');
+		 appState.priorKnowledge = {
+			 lo1: [],
+			 lo2: [],
+			 lo3: []
+		 };
+	 }
+	 
+	// Reset prior knowledge arrays
     appState.priorKnowledge.lo1 = [];
     appState.priorKnowledge.lo2 = [];
     appState.priorKnowledge.lo3 = [];
@@ -1971,40 +2239,48 @@ function savePriorKnowledgeChanges() {
 
 // Update Step 1E: Review & Edit
 function updateStep1Review() {
+    console.log("Updating Step 1 Review with current state:");
+    console.log("Lesson Info:", appState.lessonInfo);
+    console.log("Learning Objectives:", appState.learningObjectives);
+    console.log("LO Types:", appState.loTypes);
+    console.log("Misconceptions:", appState.misconceptions);
+    console.log("Prior Knowledge:", appState.priorKnowledge);
+    console.log("Response Tags:", appState.responseTags);
+
     // Lesson Information
     let lessonInfoHtml = `<h4>Lesson Information</h4>
         <table style="width: 100%; border-collapse: collapse;">
             <tr>
                 <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray); width: 30%;"><strong>Subject:</strong></td>
-                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.subject}</td>
+                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.subject || 'Not set'}</td>
             </tr>
             <tr>
                 <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);"><strong>Topic:</strong></td>
-                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.topic}</td>
+                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.topic || 'Not set'}</td>
             </tr>
             <tr>
                 <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);"><strong>Exam Board:</strong></td>
-                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.provider}</td>
+                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.provider || 'Not set'}</td>
             </tr>
             <tr>
                 <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);"><strong>Course:</strong></td>
-                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.course}</td>
+                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.course || 'Not set'}</td>
             </tr>
             <tr>
                 <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);"><strong>Level:</strong></td>
-                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.level}</td>
+                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.level || 'Not set'}</td>
             </tr>
             <tr>
                 <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);"><strong>Student Ability:</strong></td>
-                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.ability}</td>
+                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.ability || 'Not set'}</td>
             </tr>
             <tr>
                 <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);"><strong>Lesson Number:</strong></td>
-                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.lessonNumber}</td>
+                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.lessonNumber || 'Not set'}</td>
             </tr>
             <tr>
                 <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);"><strong>Lesson Title:</strong></td>
-                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.lessonTitle}</td>
+                <td style="padding: 0.5rem; border-bottom: 1px solid var(--light-gray);">${appState.lessonInfo.lessonTitle || 'Not set'}</td>
             </tr>
             <tr>
                 <td style="padding: 0.5rem;"><strong>Additional Info:</strong></td>
@@ -2017,36 +2293,42 @@ function updateStep1Review() {
     // Learning Objectives
     let loHtml = '';
     
-    // LO1
-    loHtml += `<div class="lo-container">
-        <div class="lo-header">
-            <span>Learning Objective 1</span>
-            <span class="lo-badge ${appState.learningObjectives.lo1.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo1.hasPractical ? 'Practical' : 'Theory'}</span>
-        </div>
-        <p><strong>${appState.learningObjectives.lo1.title}</strong></p>
-        <p>${appState.learningObjectives.lo1.description}</p>
-    </div>`;
-    
-    // LO2
-    loHtml += `<div class="lo-container">
-        <div class="lo-header">
-            <span>Learning Objective 2</span>
-            <span class="lo-badge ${appState.learningObjectives.lo2.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo2.hasPractical ? 'Practical' : 'Theory'}</span>
-        </div>
-        <p><strong>${appState.learningObjectives.lo2.title}</strong></p>
-        <p>${appState.learningObjectives.lo2.description}</p>
-    </div>`;
-    
-    // LO3 if it exists
-    if (appState.learningObjectives.lo3.exists) {
+    if (appState.learningObjectives && appState.learningObjectives.lo1 && appState.learningObjectives.lo1.title) {
+        // LO1
         loHtml += `<div class="lo-container">
             <div class="lo-header">
-                <span>Learning Objective 3</span>
-                <span class="lo-badge ${appState.learningObjectives.lo3.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo3.hasPractical ? 'Practical' : 'Theory'}</span>
+                <span>Learning Objective 1</span>
+                <span class="lo-badge ${appState.learningObjectives.lo1.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo1.hasPractical ? 'Practical' : 'Theory'}</span>
             </div>
-            <p><strong>${appState.learningObjectives.lo3.title}</strong></p>
-            <p>${appState.learningObjectives.lo3.description}</p>
+            <p><strong>${appState.learningObjectives.lo1.title}</strong></p>
+            <p>${appState.learningObjectives.lo1.description}</p>
         </div>`;
+        
+        // LO2
+        if (appState.learningObjectives.lo2 && appState.learningObjectives.lo2.title) {
+            loHtml += `<div class="lo-container">
+                <div class="lo-header">
+                    <span>Learning Objective 2</span>
+                    <span class="lo-badge ${appState.learningObjectives.lo2.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo2.hasPractical ? 'Practical' : 'Theory'}</span>
+                </div>
+                <p><strong>${appState.learningObjectives.lo2.title}</strong></p>
+                <p>${appState.learningObjectives.lo2.description}</p>
+            </div>`;
+        }
+        
+        // LO3 if it exists
+        if (appState.learningObjectives.lo3 && appState.learningObjectives.lo3.exists && appState.learningObjectives.lo3.title) {
+            loHtml += `<div class="lo-container">
+                <div class="lo-header">
+                    <span>Learning Objective 3</span>
+                    <span class="lo-badge ${appState.learningObjectives.lo3.hasPractical ? 'badge-practical' : ''}">${appState.learningObjectives.lo3.hasPractical ? 'Practical' : 'Theory'}</span>
+                </div>
+                <p><strong>${appState.learningObjectives.lo3.title}</strong></p>
+                <p>${appState.learningObjectives.lo3.description}</p>
+            </div>`;
+        }
+    } else {
+        loHtml = '<p>Learning objectives not available. Please complete Step 1A first.</p>';
     }
     
     document.getElementById('learningObjectivesReview').innerHTML = loHtml;
@@ -2054,36 +2336,43 @@ function updateStep1Review() {
     // Learning Objective Types
     let loTypesHtml = '';
     
-    // LO1 Types
-    loTypesHtml += `<div class="lo-container">
-        <div class="lo-header">
-            <span>Learning Objective 1 Types</span>
-        </div>
-        <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo1.aoCategory}</p>
-        <p><strong>Specific Type:</strong> ${appState.loTypes.lo1.specificType}</p>
-        <p><strong>Justification:</strong> ${appState.loTypes.lo1.justification}</p>
-    </div>`;
-    
-    // LO2 Types
-    loTypesHtml += `<div class="lo-container">
-        <div class="lo-header">
-            <span>Learning Objective 2 Types</span>
-        </div>
-        <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo2.aoCategory}</p>
-        <p><strong>Specific Type:</strong> ${appState.loTypes.lo2.specificType}</p>
-        <p><strong>Justification:</strong> ${appState.loTypes.lo2.justification}</p>
-    </div>`;
-    
-    // LO3 Types if LO3 exists
-    if (appState.learningObjectives.lo3.exists) {
+    if (appState.loTypes && appState.loTypes.lo1 && appState.loTypes.lo1.aoCategory) {
+        // LO1 Types
         loTypesHtml += `<div class="lo-container">
             <div class="lo-header">
-                <span>Learning Objective 3 Types</span>
+                <span>Learning Objective 1 Types</span>
             </div>
-            <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo3.aoCategory}</p>
-            <p><strong>Specific Type:</strong> ${appState.loTypes.lo3.specificType}</p>
-            <p><strong>Justification:</strong> ${appState.loTypes.lo3.justification}</p>
+            <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo1.aoCategory}</p>
+            <p><strong>Specific Type:</strong> ${appState.loTypes.lo1.specificType}</p>
+            <p><strong>Justification:</strong> ${appState.loTypes.lo1.justification}</p>
         </div>`;
+        
+        // LO2 Types
+        if (appState.loTypes.lo2 && appState.loTypes.lo2.aoCategory) {
+            loTypesHtml += `<div class="lo-container">
+                <div class="lo-header">
+                    <span>Learning Objective 2 Types</span>
+                </div>
+                <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo2.aoCategory}</p>
+                <p><strong>Specific Type:</strong> ${appState.loTypes.lo2.specificType}</p>
+                <p><strong>Justification:</strong> ${appState.loTypes.lo2.justification}</p>
+            </div>`;
+        }
+        
+        // LO3 Types if LO3 exists
+        if (appState.learningObjectives.lo3 && appState.learningObjectives.lo3.exists && 
+            appState.loTypes.lo3 && appState.loTypes.lo3.aoCategory) {
+            loTypesHtml += `<div class="lo-container">
+                <div class="lo-header">
+                    <span>Learning Objective 3 Types</span>
+                </div>
+                <p><strong>Assessment Objective:</strong> ${appState.loTypes.lo3.aoCategory}</p>
+                <p><strong>Specific Type:</strong> ${appState.loTypes.lo3.specificType}</p>
+                <p><strong>Justification:</strong> ${appState.loTypes.lo3.justification}</p>
+            </div>`;
+        }
+    } else {
+        loTypesHtml = '<p>Learning objective types not available. Please complete Step 1B first.</p>';
     }
     
     document.getElementById('loTypesReview').innerHTML = loTypesHtml;
@@ -2091,36 +2380,43 @@ function updateStep1Review() {
     // Misconceptions
     let misconceptionsHtml = '';
     
-    // LO1 Misconceptions
-    misconceptionsHtml += `<div class="lo-container">
-        <div class="lo-header">
-            <span>Learning Objective 1 Misconceptions</span>
-        </div>
-        <ul>
-            ${appState.misconceptions.lo1.map(m => `<li>${m}</li>`).join('')}
-        </ul>
-    </div>`;
-    
-    // LO2 Misconceptions
-    misconceptionsHtml += `<div class="lo-container">
-        <div class="lo-header">
-            <span>Learning Objective 2 Misconceptions</span>
-        </div>
-        <ul>
-            ${appState.misconceptions.lo2.map(m => `<li>${m}</li>`).join('')}
-        </ul>
-    </div>`;
-    
-    // LO3 Misconceptions if LO3 exists
-    if (appState.learningObjectives.lo3.exists) {
+    if (appState.misconceptions && appState.misconceptions.lo1 && appState.misconceptions.lo1.length > 0) {
+        // LO1 Misconceptions
         misconceptionsHtml += `<div class="lo-container">
             <div class="lo-header">
-                <span>Learning Objective 3 Misconceptions</span>
+                <span>Learning Objective 1 Misconceptions</span>
             </div>
             <ul>
-                ${appState.misconceptions.lo3.map(m => `<li>${m}</li>`).join('')}
+                ${appState.misconceptions.lo1.map(m => `<li>${m}</li>`).join('')}
             </ul>
         </div>`;
+        
+        // LO2 Misconceptions
+        if (appState.misconceptions.lo2 && appState.misconceptions.lo2.length > 0) {
+            misconceptionsHtml += `<div class="lo-container">
+                <div class="lo-header">
+                    <span>Learning Objective 2 Misconceptions</span>
+                </div>
+                <ul>
+                    ${appState.misconceptions.lo2.map(m => `<li>${m}</li>`).join('')}
+                </ul>
+            </div>`;
+        }
+        
+        // LO3 Misconceptions if LO3 exists
+        if (appState.learningObjectives.lo3 && appState.learningObjectives.lo3.exists && 
+            appState.misconceptions.lo3 && appState.misconceptions.lo3.length > 0) {
+            misconceptionsHtml += `<div class="lo-container">
+                <div class="lo-header">
+                    <span>Learning Objective 3 Misconceptions</span>
+                </div>
+                <ul>
+                    ${appState.misconceptions.lo3.map(m => `<li>${m}</li>`).join('')}
+                </ul>
+            </div>`;
+        }
+    } else {
+        misconceptionsHtml = '<p>Misconceptions not available. Please complete Step 1C first.</p>';
     }
     
     document.getElementById('misconceptionsReview').innerHTML = misconceptionsHtml;
@@ -2128,42 +2424,84 @@ function updateStep1Review() {
     // Prior Knowledge
     let priorKnowledgeHtml = '';
     
-    // LO1 Prior Knowledge
-    priorKnowledgeHtml += `<div class="lo-container">
-        <div class="lo-header">
-            <span>Learning Objective 1 Prior Knowledge</span>
-        </div>
-        <ul>
-            ${appState.priorKnowledge.lo1.map(pk => `<li>${pk}</li>`).join('')}
-        </ul>
-    </div>`;
-    
-    // LO2 Prior Knowledge
-    priorKnowledgeHtml += `<div class="lo-container">
-        <div class="lo-header">
-            <span>Learning Objective 2 Prior Knowledge</span>
-        </div>
-        <ul>
-            ${appState.priorKnowledge.lo2.map(pk => `<li>${pk}</li>`).join('')}
-        </ul>
-    </div>`;
-    
-    // LO3 Prior Knowledge if LO3 exists
-    if (appState.learningObjectives.lo3.exists) {
+    if (appState.priorKnowledge && appState.priorKnowledge.lo1 && appState.priorKnowledge.lo1.length > 0) {
+        // LO1 Prior Knowledge
         priorKnowledgeHtml += `<div class="lo-container">
             <div class="lo-header">
-                <span>Learning Objective 3 Prior Knowledge</span>
+                <span>Learning Objective 1 Prior Knowledge</span>
             </div>
             <ul>
-                ${appState.priorKnowledge.lo3.map(pk => `<li>${pk}</li>`).join('')}
+                ${appState.priorKnowledge.lo1.map(pk => `<li>${pk}</li>`).join('')}
             </ul>
         </div>`;
+        
+        // LO2 Prior Knowledge
+        if (appState.priorKnowledge.lo2 && appState.priorKnowledge.lo2.length > 0) {
+            priorKnowledgeHtml += `<div class="lo-container">
+                <div class="lo-header">
+                    <span>Learning Objective 2 Prior Knowledge</span>
+                </div>
+                <ul>
+                    ${appState.priorKnowledge.lo2.map(pk => `<li>${pk}</li>`).join('')}
+                </ul>
+            </div>`;
+        }
+        
+        // LO3 Prior Knowledge if LO3 exists
+        if (appState.learningObjectives.lo3 && appState.learningObjectives.lo3.exists && 
+            appState.priorKnowledge.lo3 && appState.priorKnowledge.lo3.length > 0) {
+            priorKnowledgeHtml += `<div class="lo-container">
+                <div class="lo-header">
+                    <span>Learning Objective 3 Prior Knowledge</span>
+                </div>
+                <ul>
+                    ${appState.priorKnowledge.lo3.map(pk => `<li>${pk}</li>`).join('')}
+                </ul>
+            </div>`;
+        }
+    } else {
+        priorKnowledgeHtml = '<p>Prior knowledge not available. Please complete Step 1D first.</p>';
     }
     
     document.getElementById('priorKnowledgeReview').innerHTML = priorKnowledgeHtml;
     
-    // Enable the finish button
-    document.getElementById('finishStep1Btn').disabled = false;
+    // Enable the finish button if all data is present, otherwise provide guidance
+    const allComplete = 
+        appState.responses.overview && 
+        appState.responses.loTypes && 
+        appState.responses.misconceptions && 
+        appState.responses.priorKnowledge;
+    
+    document.getElementById('finishStep1Btn').disabled = !allComplete;
+    
+    if (!allComplete) {
+        // Add warning message to inform the user what's missing
+        let warningHtml = '<div class="alert alert-warning" style="margin-top: 1rem;">';
+        warningHtml += '<p><strong>Missing information:</strong></p><ul>';
+        
+        if (!appState.responses.overview) warningHtml += '<li>Learning Objectives (Step 1A)</li>';
+        if (!appState.responses.loTypes) warningHtml += '<li>Learning Objective Types (Step 1B)</li>';
+        if (!appState.responses.misconceptions) warningHtml += '<li>Misconceptions (Step 1C)</li>';
+        if (!appState.responses.priorKnowledge) warningHtml += '<li>Prior Knowledge (Step 1D)</li>';
+        
+        warningHtml += '</ul><p>Please complete the missing steps before continuing to Step 2.</p></div>';
+        
+        // Add warning after the button
+        const finishBtn = document.getElementById('finishStep1Btn');
+        let warningDiv = document.getElementById('step1ReviewWarning');
+        
+        if (!warningDiv) {
+            warningDiv = document.createElement('div');
+            warningDiv.id = 'step1ReviewWarning';
+            finishBtn.parentNode.parentNode.appendChild(warningDiv);
+        }
+        
+        warningDiv.innerHTML = warningHtml;
+    } else {
+        // Remove warning if it exists
+        const warningDiv = document.getElementById('step1ReviewWarning');
+        if (warningDiv) warningDiv.remove();
+    }
 }
 
 // Add this code at the end of your app.js file
@@ -2226,4 +2564,36 @@ function updateStep1Review() {
     }
     
     console.log('Added LO debugging tools');
+})();
+
+// Add this function to help debug app state
+function debugAppState() {
+    console.group('Current App State');
+    console.log('Current Step:', appState.currentMainStep, appState.currentSubStep);
+    console.log('Learning Objectives:', appState.learningObjectives);
+    console.log('LO Types:', appState.loTypes);
+    console.log('Response - Overview:', appState.responses.overview ? 'Present' : 'Not present');
+    console.log('Response - LOTypes:', appState.responses.loTypes ? 'Present' : 'Not present');
+    console.log('Response Tags - LearningObjectives:', appState.responseTags.learningObjectives ? 'Present' : 'Not present');
+    console.log('Response Tags - LOTypes:', appState.responseTags.loTypes ? 'Present' : 'Not present');
+    console.groupEnd();
+}
+
+// Add a debug button in the UI
+(function() {
+    const interval = setInterval(function() {
+        const header = document.querySelector('.app-header');
+        if (header && !document.getElementById('debugStateBtn')) {
+            const debugBtn = document.createElement('button');
+            debugBtn.id = 'debugStateBtn';
+            debugBtn.className = 'btn btn-sm';
+            debugBtn.style.position = 'absolute';
+            debugBtn.style.right = '10px';
+            debugBtn.style.top = '10px';
+            debugBtn.textContent = 'Debug State';
+            debugBtn.addEventListener('click', debugAppState);
+            header.appendChild(debugBtn);
+            clearInterval(interval);
+        }
+    }, 1000);
 })();

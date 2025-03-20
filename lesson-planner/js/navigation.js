@@ -58,137 +58,86 @@ function checkSubstepNavScroll() {
 }
 
 // Switch to a specific substep
-window.switchSubstep = function(mainStep, subStep) {
-    console.log('Switching to substep', mainStep, subStep);
-    
-    // Update state
-    appState.currentMainStep = mainStep;
-    appState.currentSubStep = subStep;
-    
-    // Ensure main step is expanded
-    const mainStepElement = document.getElementById(`mainStep${mainStep}`);
-    const mainStepContent = document.getElementById(`mainStepContent${mainStep}`);
-    
-    if (!mainStepElement || !mainStepContent) {
-        console.error(`Could not find main step ${mainStep} elements`);
-        return;
-    }
-    
-    if (!mainStepElement.classList.contains('expanded')) {
-        mainStepElement.classList.add('expanded');
-        mainStepContent.style.height = 'auto';
-        appState.mainStepExpanded[mainStep - 1] = true;
-    }
-    
-    // Update substep tabs
-    document.querySelectorAll('.substep-tab').forEach(tab => {
-        if (tab.getAttribute('data-step') == mainStep && tab.getAttribute('data-substep') == subStep) {
-            tab.classList.add('active');
-            // Make sure the active tab is visible (scroll to it if necessary)
-            const nav = tab.closest('.substeps-nav');
-            if (nav) {
-                const tabRect = tab.getBoundingClientRect();
-                const navRect = nav.getBoundingClientRect();
-                
-                // Check if tab is not fully visible
-                if (tabRect.left < navRect.left || tabRect.right > navRect.right) {
-                    tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+function switchSubstep(stepNumber, substepLetter) {
+    try {
+        console.log('Switching to substep', stepNumber, substepLetter);
+        
+        // Set current substep
+        appState.currentSubStep = substepLetter;
+        
+        // Hide all substep content
+        document.querySelectorAll('.substep-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        
+        // Show selected substep content
+        const targetContent = document.querySelector(`.substep-content[data-step="${stepNumber}"][data-substep="${substepLetter}"]`);
+        if (targetContent) {
+            targetContent.classList.add('active');
+        }
+        
+        // Update substep tabs
+        document.querySelectorAll('.substep-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        const targetTab = document.querySelector(`.substep-tab[data-step="${stepNumber}"][data-substep="${substepLetter}"]`);
+        if (targetTab) {
+            targetTab.classList.add('active');
+        }
+        
+        // Clear response textarea when switching to a new substep
+        // This prevents data from one step being carried over to another
+        const responseTextareas = document.querySelectorAll('.response-textarea');
+        responseTextareas.forEach(textarea => {
+            if (textarea.id !== 'overviewResponseTextarea' && 
+                (stepNumber !== 1 || substepLetter !== 'A')) {
+                // Don't clear Step 1A's textarea, but clear others when switching
+                if (textarea.id === `${getSubstepIdentifier(stepNumber, substepLetter)}ResponseTextarea`) {
+                    // Only clear if this is the textarea for the current substep
+                    if (!appState.responses[getSubstepIdentifier(stepNumber, substepLetter)]) {
+                        // Only clear if there's no saved response for this substep
+                        textarea.value = '';
+                    }
                 }
             }
-        } else {
-            tab.classList.remove('active');
+        });
+        
+        // Update summary content based on substep
+        // These are conditional to avoid errors if the functions don't exist
+        if (stepNumber === 1) {
+            if (substepLetter === 'B' && typeof displayLOTypesSubstepSummary === 'function') {
+                displayLOTypesSubstepSummary();
+            } else if (substepLetter === 'C' && typeof displayMisconceptionsSubstepSummary === 'function') {
+                displayMisconceptionsSubstepSummary();
+            } else if (substepLetter === 'D' && typeof displayPriorKnowledgeSubstepSummary === 'function') {
+                displayPriorKnowledgeSubstepSummary();
+            } else if (substepLetter === 'E' && typeof updateStep1Review === 'function') {
+                updateStep1Review();
+            }
         }
-    });
-    
-        // Update substep content
-    document.querySelectorAll('.substep-content').forEach(content => {
-        if (content.getAttribute('data-step') == mainStep && content.getAttribute('data-substep') == subStep) {
-            content.classList.add('active');
-        } else {
-            content.classList.remove('active');
+        
+        // Scroll to top of the substep
+        const mainStepContent = document.getElementById(`mainStepContent${stepNumber}`);
+        if (mainStepContent) {
+            mainStepContent.scrollTop = 0;
         }
-    });
-    
-    // Prepare content for specific substeps - Step 1
-    if (mainStep === 1) {
-        if (subStep === 'B') {
-            prepareLOTypesSubstep();
-        } else if (subStep === 'C') {
-            prepareMisconceptionsSubstep();
-        } else if (subStep === 'D') {
-            preparePriorKnowledgeSubstep();
-        } else if (subStep === 'E') {
-            prepareReviewSubstep();
-        }
+    } catch (error) {
+        console.error('Error in switchSubstep:', error);
     }
+}
+
+// Helper function to get substep identifier for responses object
+function getSubstepIdentifier(stepNumber, substepLetter) {
+    const identifiers = {
+        '1A': 'overview',
+        '1B': 'loTypes',
+        '1C': 'misconceptions',
+        '1D': 'priorKnowledge',
+        // Add other mappings as needed
+    };
     
-    // Prepare content for specific substeps - Step 1
-    if (mainStep === 1) {
-        if (subStep === 'B') {
-            prepareLOTypesSubstep();
-        } else if (subStep === 'C') {
-            prepareMisconceptionsSubstep();
-        } else if (subStep === 'D') {
-            preparePriorKnowledgeSubstep();
-        } else if (subStep === 'E') {
-            prepareReviewSubstep();
-        }
-    }
-    
-    // Prepare content for specific substeps - Step 2
-    if (mainStep === 2) {
-        if (subStep === 'A') {
-            prepareFrameworksSubstep();
-        } else if (subStep === 'B') {
-            prepareExamTechniquesSubstep();
-        } else if (subStep === 'C') {
-            prepareLessonStructureSubstep();
-        } else if (subStep === 'D') {
-            preparePracticalRequirementsSubstep();
-        } else if (subStep === 'E') {
-            prepareFrayerModelSubstep();
-        } else if (subStep === 'F') {
-            prepareStep2ReviewSubstep();
-        }
-    }
-    
-	// Prepare content for specific substeps - Step 3
-	if (mainStep === 3) {
-		if (subStep === 'A') {
-			prepareRetrievalPracticeSubstep();
-		} else if (subStep === 'B') {
-			prepareTeachingInputSubstep();
-		} else if (subStep === 'C') {
-			prepareFormativeAssessmentSubstep();
-		} else if (subStep === 'D') {
-			prepareSlideReviewSubstep();
-		}
-	}
-	
-	// Prepare content for specific substeps - Step 4
-    if (mainStep === 4) {
-        if (subStep === 'A') {
-            prepareReferenceMaterialsSubstep();
-        } else if (subStep === 'B') {
-            prepareRetrievalWorksheetSubstep();
-        } else if (subStep === 'C') {
-            prepareScaleQuestionsSubstep();
-        } else if (subStep === 'D') {
-            prepareApplicationQuestionsSubstep();
-        } else if (subStep === 'E') {
-            prepareExamTechniqueQuestionsSubstep();
-        } else if (subStep === 'F') {
-            prepareExamStyleQuestionsSubstep();
-        } else if (subStep === 'G') {
-            prepareWorksheetFinalizationSubstep();
-        }
-    }
-	
-    // Scroll to top of the main step
-    mainStepElement.scrollIntoView({ behavior: 'smooth' });
-    
-    // Check if we need to show scroll indicators
-    checkSubstepNavScroll();
+    return identifiers[`${stepNumber}${substepLetter}`] || `step${stepNumber}${substepLetter}`;
 }
 
 // Update step indicators
